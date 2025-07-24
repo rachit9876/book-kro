@@ -237,17 +237,7 @@ function setupGlobalEvents() {
     document.addEventListener('click', handleGlobalClick);
     document.addEventListener('keydown', handleGlobalKeydown);
     
-    // Handle online/offline status
-    window.addEventListener('online', () => {
-        showToast('Connection restored', 'success');
-        if (appManager.retryAttempts > 0) {
-            appManager.retry();
-        }
-    });
-    
-    window.addEventListener('offline', () => {
-        showToast('You are offline. Some features may not work.', 'warning');
-    });
+
     
 
 }

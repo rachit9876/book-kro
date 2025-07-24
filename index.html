@@ -126,11 +126,7 @@
         Skip to main content
     </a>
     
-    <!-- Offline indicator -->
-    <div id="offline-indicator" class="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 text-sm z-40 transform -translate-y-full transition-transform hidden">
-        <span>You are offline. Some features may be limited.</span>
-        <button id="retry-connection" class="ml-2 underline hover:no-underline">Retry</button>
-    </div>
+
     
     <div id="app" class="opacity-0 transition-opacity duration-500">
         <header id="header" class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 p-4 transition-colors sticky top-0 z-40 shadow-sm"></header>
@@ -174,100 +170,9 @@
         <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
     </div>
     
-    <!-- Install prompt for PWA -->
-    <div id="install-prompt" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-blue-600 text-white p-4 rounded-lg shadow-lg transform translate-y-full transition-transform z-40 hidden">
-        <div class="flex items-center justify-between">
-            <div class="flex-1">
-                <h3 class="font-medium">Install Book-kro</h3>
-                <p class="text-sm text-blue-100 mt-1">Get quick access to movie booking</p>
-            </div>
-            <div class="flex space-x-2 ml-4">
-                <button id="install-app" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-50 transition-colors">
-                    Install
-                </button>
-                <button id="dismiss-install" class="text-blue-100 hover:text-white p-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
+
     
-    <!-- Scripts loaded in optimal order -->
-    <script>
-        // Register service worker for offline functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', async () => {
-                try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
-                    console.log('ServiceWorker registered successfully');
-                    
-                    // Listen for updates
-                    registration.addEventListener('updatefound', () => {
-                        const newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // New version available
-                                showUpdateAvailable();
-                            }
-                        });
-                    });
-                } catch (error) {
-                    console.log('ServiceWorker registration failed:', error);
-                }
-            });
-        }
-        
-        // PWA install prompt
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            showInstallPrompt();
-        });
-        
-        function showInstallPrompt() {
-            const installPrompt = document.getElementById('install-prompt');
-            installPrompt.classList.remove('hidden');
-            setTimeout(() => {
-                installPrompt.classList.remove('translate-y-full');
-            }, 100);
-        }
-        
-        function showUpdateAvailable() {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-green-600 text-white p-4 rounded-lg shadow-lg z-50';
-            toast.innerHTML = `
-                <div class="flex items-center space-x-3">
-                    <span>Update available!</span>
-                    <button onclick="window.location.reload()" class="bg-white text-green-600 px-3 py-1 rounded text-sm">
-                        Refresh
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => toast.remove(), 10000);
-        }
-        
-        // Handle offline/online status
-        function updateOnlineStatus() {
-            const indicator = document.getElementById('offline-indicator');
-            if (navigator.onLine) {
-                indicator.classList.add('hidden', '-translate-y-full');
-            } else {
-                indicator.classList.remove('hidden');
-                setTimeout(() => indicator.classList.remove('-translate-y-full'), 100);
-            }
-        }
-        
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        
-        // Initial check
-        updateOnlineStatus();
-    </script>
+
     
     <script src="js/api.js"></script>
     <script src="js/header.js"></script>
@@ -280,38 +185,8 @@
     <script src="js/app.js"></script>
     
     <script>
-        // Handle install prompt events
         document.addEventListener('DOMContentLoaded', () => {
-            const installBtn = document.getElementById('install-app');
-            const dismissBtn = document.getElementById('dismiss-install');
-            const retryBtn = document.getElementById('retry-connection');
             const closeErrorBtn = document.getElementById('close-error');
-            
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const result = await deferredPrompt.userChoice;
-                        if (result.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
-                        }
-                        deferredPrompt = null;
-                        document.getElementById('install-prompt').classList.add('translate-y-full');
-                    }
-                });
-            }
-            
-            if (dismissBtn) {
-                dismissBtn.addEventListener('click', () => {
-                    document.getElementById('install-prompt').classList.add('translate-y-full');
-                });
-            }
-            
-            if (retryBtn) {
-                retryBtn.addEventListener('click', () => {
-                    window.location.reload();
-                });
-            }
             
             if (closeErrorBtn) {
                 closeErrorBtn.addEventListener('click', () => {
