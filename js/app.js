@@ -223,8 +223,7 @@ async function initializeApp() {
         setupGlobalEvents();
         setupErrorHandling();
         
-        // Performance optimization: preload critical images
-        preloadCriticalAssets();
+
         
     } catch (error) {
         console.error('App initialization error:', error);
@@ -250,10 +249,7 @@ function setupGlobalEvents() {
         showToast('You are offline. Some features may not work.', 'warning');
     });
     
-    // Memory cleanup on page unload
-    window.addEventListener('beforeunload', () => {
-        api.clearCache();
-    });
+
 }
 
 function handleGlobalClick(e) {
@@ -377,13 +373,7 @@ function setupErrorHandling() {
     });
 }
 
-function preloadCriticalAssets() {
-    // Preload placeholder image
-    api.preloadImage('assets/placeHolder.webp').catch(console.warn);
-    
-    // Preload dark mode icon
-    api.preloadImage('assets/darkMode.svg').catch(console.warn);
-}
+
 
 // Enhanced navigation functions with smooth transitions
 function showMoviesTab() {
