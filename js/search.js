@@ -28,10 +28,48 @@ function createSearchBar() {
 }
 
 let searchTimeout;
+let typingInterval;
+
+function startTypingEffect() {
+    const searchInput = document.getElementById('search-input');
+    const messages = ['Search movies...', 'AI Powered Search...', 'Find your favorite films...'];
+    let messageIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function type() {
+        if (searchInput !== document.activeElement) {
+            const currentMessage = messages[messageIndex];
+            
+            if (!isDeleting && charIndex < currentMessage.length) {
+                searchInput.placeholder = currentMessage.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(type, 100);
+            } else if (isDeleting && charIndex > 0) {
+                searchInput.placeholder = currentMessage.substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(type, 50);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    messageIndex = (messageIndex + 1) % messages.length;
+                }
+                setTimeout(type, isDeleting ? 1000 : 500);
+            }
+        } else {
+            setTimeout(type, 1000);
+        }
+    }
+    
+    type();
+}
+
 function setupSearchEvents() {
     const searchInput = document.getElementById('search-input');
     const genreFilter = document.getElementById('genre-filter');
     const sortFilter = document.getElementById('sort-filter');
+    
+    startTypingEffect();
 
     searchInput.addEventListener('input', (e) => {
         clearTimeout(searchTimeout);

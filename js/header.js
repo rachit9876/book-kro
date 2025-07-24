@@ -10,7 +10,7 @@ function createHeader() {
                 <a href="#" id="favorites-tab" class="hover:text-blue-400 transition-colors">Favorites</a>
                 <a href="#" id="bookings-tab" class="hover:text-blue-400 transition-colors">My Bookings</a>
                 <button id="theme-toggle" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition-colors ml-4">
-                    <img src="assets/darkMode.svg" alt="Toggle theme" class="w-5 h-5">
+                    <img src="assets/darkMode.svg" alt="Toggle theme" class="w-5 h-5 cursor-pointer">
                 </button>
             </nav>
             <button id="hamburger" class="md:hidden flex flex-col space-y-1">
@@ -24,7 +24,7 @@ function createHeader() {
             <a href="#" id="mobile-favorites-tab" class="block hover:text-blue-400 transition-colors">Favorites</a>
             <a href="#" id="mobile-bookings-tab" class="block hover:text-blue-400 transition-colors">My Bookings</a>
             <button id="mobile-theme-toggle" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition-colors">
-                <img src="assets/darkMode.svg" alt="Toggle theme" class="w-5 h-5">
+                <img src="assets/darkMode.svg" alt="Toggle theme" class="w-5 h-5 cursor-pointer">
             </button>
         </nav>
     `;

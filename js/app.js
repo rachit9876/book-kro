@@ -1,5 +1,22 @@
 let currentPage = 1;
 
+async function loadPopularMovies(page = 1) {
+    try {
+        const data = await api.discoverMovies({ sort: 'popularity.desc', page });
+        const movieGrid = document.getElementById('movie-grid');
+        const paginationContainer = document.getElementById('pagination');
+        
+        movieGrid.innerHTML = data.results.map(movie => createMovieCard(movie)).join('');
+        paginationContainer.innerHTML = createPagination(data.page, data.total_pages, loadPopularMovies);
+        
+        currentPage = data.page;
+        setupPaginationEvents(currentPage, data.total_pages, loadPopularMovies);
+    } catch (error) {
+        console.error('Error loading movies:', error);
+        document.getElementById('movie-grid').innerHTML = '<p>Error loading movies. Please try again later.</p>';
+    }
+}
+
 async function loadUpcomingMovies(page = 1) {
     try {
         const data = await api.getUpcomingMovies(page);
@@ -27,7 +44,7 @@ function initializeApp() {
     document.getElementById('search-container').innerHTML = createSearchBar();
     document.getElementById('favorites-container').innerHTML = createFavoritesSection();
     
-    loadUpcomingMovies();
+    loadPopularMovies();
     loadFavorites();
     setupSearchEvents();
     setupGlobalEvents();
@@ -35,7 +52,7 @@ function initializeApp() {
 
 function setupGlobalEvents() {
     document.addEventListener('click', (e) => {
-        if (e.target.id === 'theme-toggle') {
+        if (e.target.id === 'theme-toggle' || e.target.alt === 'Toggle theme') {
             toggleTheme();
         }
         
