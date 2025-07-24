@@ -87,15 +87,7 @@ function createMovieCard(movie, isFavorite = false) {
                         🎫 Book Now
                     </button>
                     
-                    <!-- Add to favorites button (only if not already favorite) -->
-                    ${!isFavorite ? `
-                        <button 
-                            class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg transition-colors duration-200 add-favorite text-sm" 
-                            data-movie-id="${movie.id}"
-                            aria-label="Add ${movie.title} to favorites">
-                            ♥ Add to Favorites
-                        </button>
-                    ` : ''}
+
                 </div>
             </div>
         </div>

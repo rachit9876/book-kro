@@ -174,11 +174,7 @@ function setupPaginationEvents(currentPage, totalPages, onPageChange) {
                 });
             } else {
                 jumpInput.value = currentPage;
-                if (page === currentPage) {
-                    showToast('Already on that page', 'info');
-                } else {
-                    showToast('Invalid page number', 'error');
-                }
+
             }
         };
         

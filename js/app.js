@@ -171,7 +171,7 @@ function lazyLoadImages() {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Set initial theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.classList.toggle('dark', savedTheme === 'dark');
         
         // Initialize header first
@@ -204,7 +204,6 @@ async function initializeApp() {
     try {
         // Initialize components
         document.getElementById('search-container').innerHTML = createSearchBar();
-        document.getElementById('favorites-container').innerHTML = createFavoritesSection();
         
         // Initialize localStorage if not exists
         if (!localStorage.getItem('favorites')) {
@@ -216,7 +215,6 @@ async function initializeApp() {
         
         // Load initial content
         await loadPopularMovies();
-        loadFavorites();
         
         // Setup event listeners
         setupSearchEvents();
@@ -255,18 +253,7 @@ function handleGlobalClick(e) {
         return;
     }
     
-    // Add to favorites button click
-    if (e.target.classList.contains('add-favorite') || e.target.closest('.add-favorite')) {
-        e.preventDefault();
-        e.stopPropagation();
-        const favBtn = e.target.classList.contains('add-favorite') ? e.target : e.target.closest('.add-favorite');
-        const movieId = favBtn.dataset.movieId;
-        if (movieId) {
-            handleAddToFavorites(parseInt(movieId));
-        }
-        return;
-    }
-    
+
     // Remove favorite click
     if (e.target.classList.contains('remove-favorite') || e.target.closest('.remove-favorite')) {
         e.preventDefault();
@@ -279,12 +266,7 @@ function handleGlobalClick(e) {
         return;
     }
     
-    // Theme toggle
-    if (e.target.id === 'theme-toggle' || e.target.alt === 'Toggle theme' || e.target.closest('#theme-toggle')) {
-        e.preventDefault();
-        toggleTheme();
-        return;
-    }
+
     
     // Movie card click - only if not clicking on buttons
     if (e.target.classList.contains('movie-card') || e.target.closest('.movie-card')) {
@@ -321,32 +303,37 @@ function handleGlobalKeydown(e) {
 
 async function handleBookingClick(movieId) {
     try {
-        showToast('Loading movie details...', 'info');
+        // Show loading state
+        const bookBtn = document.querySelector(`[data-movie-id="${movieId}"] .book-btn`);
+        if (bookBtn) {
+            bookBtn.disabled = true;
+            bookBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Loading...';
+        }
+        
         const movie = await api.getMovieDetails(movieId);
+        
+        // Reset button state
+        if (bookBtn) {
+            bookBtn.disabled = false;
+            bookBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg> Book Now';
+        }
+        
         showBookingModal(movie);
     } catch (error) {
         console.error('Error loading movie details for booking:', error);
-        showToast('Failed to load movie details. Please try again.', 'error');
+        
+        // Reset button state
+        const bookBtn = document.querySelector(`[data-movie-id="${movieId}"] .book-btn`);
+        if (bookBtn) {
+            bookBtn.disabled = false;
+            bookBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg> Book Now';
+        }
+        
+        showError('Failed to load movie details. Please try again.');
     }
 }
 
-// Handle adding to favorites using existing function
-async function handleAddToFavorites(movieId) {
-    try {
-        const movie = await api.getMovieDetails(movieId);
-        const added = addToFavorites(movie); // Use existing function from favorites.js
-        
-        // Refresh the current view if we're on movies tab and movie was added
-        if (added && appManager.currentView === 'movies') {
-            if (currentLoadFunction) {
-                await currentLoadFunction(currentPage);
-            }
-        }
-    } catch (error) {
-        console.error('Error adding to favorites:', error);
-        showToast('Failed to add to favorites. Please try again.', 'error');
-    }
-}
+
 
 function setupErrorHandling() {
     // Global error handler
@@ -369,35 +356,34 @@ function setupErrorHandling() {
 function showMoviesTab() {
     appManager.currentView = 'movies';
     
-    document.getElementById('upcoming-movies').classList.remove('hidden');
-    document.getElementById('favorites-section').classList.add('hidden');
-    document.getElementById('bookings-container').classList.add('hidden');
-    document.getElementById('search-container').classList.remove('hidden');
+    const upcomingMovies = document.getElementById('upcoming-movies');
+    const favoritesSection = document.getElementById('favorites-section');
+    const bookingsContainer = document.getElementById('bookings-container');
+    const searchContainer = document.getElementById('search-container');
+    
+    if (upcomingMovies) upcomingMovies.classList.remove('hidden');
+    if (favoritesSection) favoritesSection.classList.add('hidden');
+    if (bookingsContainer) bookingsContainer.classList.add('hidden');
+    if (searchContainer) searchContainer.classList.remove('hidden');
     
     updateActiveTab('movies');
     scrollToTop();
 }
 
-function showFavoritesTab() {
-    appManager.currentView = 'favorites';
-    
-    document.getElementById('upcoming-movies').classList.add('hidden');
-    document.getElementById('favorites-section').classList.remove('hidden');
-    document.getElementById('bookings-container').classList.add('hidden');
-    document.getElementById('search-container').classList.add('hidden');
-    
-    loadFavorites();
-    updateActiveTab('favorites');
-    scrollToTop();
-}
+
 
 function showBookingsTab() {
     appManager.currentView = 'bookings';
     
-    document.getElementById('upcoming-movies').classList.add('hidden');
-    document.getElementById('favorites-section').classList.add('hidden');
-    document.getElementById('bookings-container').classList.remove('hidden');
-    document.getElementById('search-container').classList.add('hidden');
+    const upcomingMovies = document.getElementById('upcoming-movies');
+    const favoritesSection = document.getElementById('favorites-section');
+    const bookingsContainer = document.getElementById('bookings-container');
+    const searchContainer = document.getElementById('search-container');
+    
+    if (upcomingMovies) upcomingMovies.classList.add('hidden');
+    if (favoritesSection) favoritesSection.classList.add('hidden');
+    if (bookingsContainer) bookingsContainer.classList.remove('hidden');
+    if (searchContainer) searchContainer.classList.add('hidden');
     
     loadBookings();
     updateActiveTab('bookings');
@@ -406,7 +392,7 @@ function showBookingsTab() {
 
 function updateActiveTab(activeTab) {
     // Update desktop tabs
-    const tabs = ['movies', 'favorites', 'bookings'];
+    const tabs = ['movies', 'bookings'];
     tabs.forEach(tab => {
         const element = document.getElementById(`${tab}-tab`);
         const mobileElement = document.getElementById(`mobile-${tab}-tab`);
@@ -476,58 +462,5 @@ function loadBookings() {
         `).join('');
 }
 
-// Enhanced theme toggle with persistence
-function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.classList.contains('dark');
-    
-    if (isDark) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-    } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    }
-    
-    // Update theme toggle icons if needed
-    updateThemeIcon(!isDark);
-}
 
-function updateThemeIcon(isDark) {
-    // Update theme toggle button appearance if needed
-    const themeButtons = document.querySelectorAll('#theme-toggle, #mobile-theme-toggle');
-    themeButtons.forEach(button => {
-        button.classList.toggle('bg-gray-700', !isDark);
-        button.classList.toggle('bg-yellow-500', isDark);
-    });
-}
 
-// Toast notification system
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    const colors = {
-        success: 'bg-green-500',
-        error: 'bg-red-500',
-        warning: 'bg-yellow-500',
-        info: 'bg-blue-500'
-    };
-    
-    toast.className = `${colors[type] || colors.info} text-white px-4 py-2 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 animate-bounce-in`;
-    toast.textContent = message;
-    
-    const container = document.getElementById('toast-container');
-    container.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => {
-            container.removeChild(toast);
-        }, 300);
-    }, 3000);
-}

@@ -1,5 +1,14 @@
 function showBookingModal(movie) {
+    // Close any existing modals first
     closeMovieModal();
+    closeBookingModal();
+    
+    // Validate movie object
+    if (!movie || !movie.id || !movie.title) {
+        console.error('Invalid movie object:', movie);
+        showError('Unable to load booking details. Please try again.');
+        return;
+    }
     
     const currentDate = new Date();
     const maxDate = new Date();
@@ -166,8 +175,13 @@ function showBookingModal(movie) {
         </div>
     `;
     
-    document.body.insertAdjacentHTML('beforeend', bookingModal);
-    setupBookingEvents(movie);
+    try {
+        document.body.insertAdjacentHTML('beforeend', bookingModal);
+        setupBookingEvents(movie);
+    } catch (error) {
+        console.error('Error setting up booking modal:', error);
+        showError('Failed to open booking modal. Please try again.');
+    }
 }
 
 function generateShowTimes() {
@@ -355,6 +369,8 @@ function confirmBooking(movie, bookingState) {
     // Close modal
     closeBookingModal();
     
+
+    
     // Show success message
     showBookingSuccessModal(booking);
 }
@@ -417,5 +433,8 @@ function showBookingSuccessModal(booking) {
 
 function closeBookingModal() {
     const modal = document.getElementById('booking-modal');
-    if (modal) modal.remove();
+    if (modal) {
+        modal.classList.add('fade-out');
+        setTimeout(() => modal.remove(), 300);
+    }
 }

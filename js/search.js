@@ -221,14 +221,14 @@ async function searchMovies(query) {
         
         if (data && data.results) {
             displayMovies(data.results);
-            showSearchInfo(data.results.length, query);
+
         }
         
         hideSearchLoading();
     } catch (error) {
         console.error('Search error:', error);
         hideSearchLoading();
-        showToast('Search failed. Please try again.', 'error');
+
     }
 }
 
@@ -331,7 +331,7 @@ async function filterMovies() {
     } catch (error) {
         console.error('Filter error:', error);
         hideSearchLoading();
-        showToast('Filter failed. Please try again.', 'error');
+
     }
 }
 
@@ -339,6 +339,8 @@ function displayMovies(movies) {
     const movieGrid = document.getElementById('movie-grid');
     
     if (movies.length === 0) {
+        const query = document.getElementById('search-input').value.trim();
+
         movieGrid.innerHTML = `
             <div class="col-span-full text-center py-12">
                 <div class="text-6xl mb-4">🔍</div>

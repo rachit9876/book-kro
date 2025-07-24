@@ -12,9 +12,7 @@ function createMovieModal(movie) {
     const cast = movie.credits && movie.credits.cast ? 
         movie.credits.cast.slice(0, 5).map(actor => actor.name).join(', ') : '';
     
-    // Check if already in favorites
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const isFavorite = favorites.some(fav => fav.id === movie.id);
+
 
     return `
         <div id="movie-modal" class="fixed inset-0 bg-black bg-opacity-0 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4 transition-all duration-300">
@@ -57,7 +55,7 @@ function createMovieModal(movie) {
                 <div class="p-4 sm:p-6">
                     <div class="flex flex-col sm:flex-row gap-6">
                         <!-- Poster -->
-                        <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <div class="flex-shrink-0 mx-auto sm:mx-0 hidden sm:block">
                             <img src="${posterUrl}" alt="${movie.title} poster" 
                                  class="w-40 h-60 sm:w-48 sm:h-72 object-cover rounded-xl shadow-lg"
                                  onerror="this.src='assets/placeHolder.webp'">
@@ -99,12 +97,7 @@ function createMovieModal(movie) {
                                     Book Tickets
                                 </button>
                                 
-                                <button id="add-to-favorites" class="flex-1 ${isFavorite ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'} ${isFavorite ? 'text-white' : 'text-gray-700 dark:text-gray-300'} px-6 py-3 rounded-xl transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2">
-                                    <svg class="w-5 h-5" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                    ${isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-                                </button>
+
                                 
                                 <!-- Share button -->
                                 <button id="share-movie" class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl transition-colors duration-200 flex items-center justify-center" title="Share this movie">
@@ -158,7 +151,7 @@ async function showMovieModal(movieId) {
     } catch (error) {
         console.error('Error loading movie details:', error);
         document.getElementById('movie-modal-loading')?.remove();
-        showToast('Failed to load movie details. Please try again.', 'error');
+
     }
 }
 
@@ -178,21 +171,7 @@ function setupMovieModalEvents(movie) {
     };
     document.addEventListener('keydown', handleEscape);
     
-    // Add/remove favorites
-    const favButton = document.getElementById('add-to-favorites');
-    favButton.addEventListener('click', () => {
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        const isFavorite = favorites.some(fav => fav.id === movie.id);
-        
-        if (isFavorite) {
-            removeFromFavorites(movie.id);
-        } else {
-            addToFavorites(movie);
-        }
-        
-        // Update button appearance
-        updateFavoriteButton(favButton, !isFavorite);
-    });
+
     
     // Book tickets
     document.getElementById('book-tickets').addEventListener('click', () => {
@@ -205,23 +184,7 @@ function setupMovieModalEvents(movie) {
     });
 }
 
-function updateFavoriteButton(button, isFavorite) {
-    const icon = button.querySelector('svg');
-    
-    if (isFavorite) {
-        button.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2';
-        button.textContent = '';
-        button.appendChild(icon);
-        button.insertAdjacentText('beforeend', ' Remove from Favorites');
-        icon.setAttribute('fill', 'currentColor');
-    } else {
-        button.className = 'flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-xl transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2';
-        button.textContent = '';
-        button.appendChild(icon);
-        button.insertAdjacentText('beforeend', ' Add to Favorites');
-        icon.setAttribute('fill', 'none');
-    }
-}
+
 
 function closeMovieModal() {
     const modal = document.getElementById('movie-modal');
@@ -236,40 +199,9 @@ function closeMovieModal() {
     }
 }
 
-function addToFavorites(movie) {
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    
-    if (!favorites.find(fav => fav.id === movie.id)) {
-        favorites.push({
-            id: movie.id,
-            title: movie.title,
-            poster_path: movie.poster_path,
-            release_date: movie.release_date,
-            vote_average: movie.vote_average
-        });
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        showToast('Added to favorites! ❤️', 'success');
-        
-        // Update favorites display if currently viewing
-        if (document.getElementById('favorites-section') && !document.getElementById('favorites-section').classList.contains('hidden')) {
-            loadFavorites();
-        }
-    } else {
-        showToast('Already in favorites', 'info');
-    }
-}
 
-function removeFromFavorites(movieId) {
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    favorites = favorites.filter(movie => movie.id !== movieId);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    showToast('Removed from favorites', 'info');
-    
-    // Update favorites display if currently viewing
-    if (document.getElementById('favorites-section') && !document.getElementById('favorites-section').classList.contains('hidden')) {
-        loadFavorites();
-    }
-}
+
+
 
 async function shareMovie(movie) {
     const shareData = {
@@ -281,15 +213,15 @@ async function shareMovie(movie) {
     try {
         if (navigator.share) {
             await navigator.share(shareData);
-            showToast('Movie shared successfully!', 'success');
+
         } else {
             // Fallback: Copy to clipboard
             await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
-            showToast('Movie details copied to clipboard!', 'success');
+
         }
     } catch (error) {
         console.error('Error sharing movie:', error);
-        showToast('Failed to share movie', 'error');
+
     }
 }
 

@@ -2,7 +2,7 @@ function createHeader() {
     return `
         <div class="flex justify-between items-center max-w-7xl mx-auto">
             <div class="flex items-center space-x-4">
-                <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity duration-200" id="home-logo">
                     🎬 Book-kro
                 </h1>
             </div>
@@ -12,9 +12,7 @@ function createHeader() {
                 <a href="#" id="movies-tab" class="hover:text-blue-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     Movies
                 </a>
-                <a href="#" id="favorites-tab" class="hover:text-blue-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Favorites
-                </a>
+
                 <a href="#" id="bookings-tab" class="hover:text-blue-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     My Bookings
                 </a>
@@ -41,9 +39,7 @@ function createHeader() {
             <a href="#" id="mobile-movies-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 📽️ Movies
             </a>
-            <a href="#" id="mobile-favorites-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                ❤️ Favorites
-            </a>
+
             <a href="#" id="mobile-bookings-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 🎫 My Bookings
             </a>
@@ -66,6 +62,12 @@ function renderHeader() {
     
     // Setup event listeners
     setupHeaderEvents();
+    
+    // Home logo click event
+    document.getElementById('home-logo').addEventListener('click', () => {
+        showMoviesTab();
+        updateActiveTab('movies');
+    });
     
     // Set initial active tab
     updateActiveTab('movies');
@@ -121,11 +123,7 @@ function setupTabNavigation() {
         updateActiveTab('movies');
     });
     
-    document.getElementById('favorites-tab').addEventListener('click', (e) => {
-        e.preventDefault();
-        showFavoritesTab();
-        updateActiveTab('favorites');
-    });
+
     
     document.getElementById('bookings-tab').addEventListener('click', (e) => {
         e.preventDefault();
@@ -143,13 +141,7 @@ function setupMobileTabNavigation() {
         resetHamburger();
     });
     
-    document.getElementById('mobile-favorites-tab').addEventListener('click', (e) => {
-        e.preventDefault();
-        showFavoritesTab();
-        updateActiveTab('favorites');
-        toggleMobileMenu();
-        resetHamburger();
-    });
+
     
     document.getElementById('mobile-bookings-tab').addEventListener('click', (e) => {
         e.preventDefault();
@@ -197,7 +189,7 @@ function resetHamburger() {
 
 function updateActiveTab(activeTab) {
     // Update desktop tabs
-    const tabs = ['movies', 'favorites', 'bookings'];
+    const tabs = ['movies', 'bookings'];
     tabs.forEach(tab => {
         const element = document.getElementById(`${tab}-tab`);
         const mobileElement = document.getElementById(`mobile-${tab}-tab`);
@@ -225,11 +217,11 @@ function toggleTheme() {
     if (isDark) {
         html.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-        showToast('Light mode activated ☀️', 'info');
+
     } else {
         html.classList.add('dark');
         localStorage.setItem('theme', 'dark');
-        showToast('Dark mode activated 🌙', 'info');
+
     }
     
     // Animate theme transition
