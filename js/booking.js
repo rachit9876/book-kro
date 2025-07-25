@@ -162,12 +162,12 @@ function showBookingModal(movie) {
                             </div>
                         </div>
                         
-                        <!-- Confirm Button -->
-                        <button type="submit" id="confirm-booking" class="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2" disabled>
+                        <!-- Proceed to Payment Button -->
+                        <button type="submit" id="confirm-booking" class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2" disabled>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
-                            Confirm Booking
+                            Proceed to Payment
                         </button>
                     </form>
                 </div>
@@ -306,7 +306,8 @@ function setupBookingEvents(movie) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (validateForm()) {
-            confirmBooking(movie, bookingState);
+            closeBookingModal();
+            showPaymentModal(movie, bookingState);
         }
     });
     
@@ -333,47 +334,17 @@ function setupBookingEvents(movie) {
         
         if (isValid) {
             confirmButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
-            confirmButton.classList.add('bg-green-600', 'hover:bg-green-700');
+            confirmButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
         } else {
             confirmButton.classList.add('bg-gray-400', 'cursor-not-allowed');
-            confirmButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+            confirmButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
         }
         
         return isValid;
     }
 }
 
-function confirmBooking(movie, bookingState) {
-    const total = Math.round(bookingState.timePrice * bookingState.tickets * bookingState.seatMultiplier);
-    
-    // Create booking object
-    const booking = {
-        id: Date.now(),
-        movieTitle: movie.title,
-        movieId: movie.id,
-        theater: bookingState.theater,
-        date: bookingState.date,
-        time: bookingState.time,
-        tickets: bookingState.tickets,
-        seatType: bookingState.seatType,
-        total: total,
-        timestamp: new Date().toISOString(),
-        status: 'confirmed'
-    };
-    
-    // Save booking to localStorage
-    let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-    bookings.push(booking);
-    localStorage.setItem('bookings', JSON.stringify(bookings));
-    
-    // Close modal
-    closeBookingModal();
-    
 
-    
-    // Show success message
-    showBookingSuccessModal(booking);
-}
 
 function showBookingSuccessModal(booking) {
     const successModal = `
