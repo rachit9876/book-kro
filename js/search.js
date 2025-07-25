@@ -8,7 +8,7 @@ function createSearchBar() {
                         type="text" 
                         id="search-input" 
                         placeholder="Search movies..." 
-                        class="w-full px-4 py-3 pr-10 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                        class="w-full px-4 py-3 pr-10 rounded-full border border-gray-300 dark:border-gray-600 bg-purple-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
                         autocomplete="off"
                         spellcheck="false"
                     >
