@@ -1,6 +1,6 @@
 function createHeader() {
     return `
-        <div class="flex justify-between items-center max-w-7xl mx-auto">
+        <div class="flex justify-between items-center px-2">
             <div class="flex items-center space-x-4">
                 <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity duration-200" id="home-logo">
                     🎬 Book-kro

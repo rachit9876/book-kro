@@ -171,7 +171,7 @@ function lazyLoadImages() {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Set initial theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.classList.toggle('dark', savedTheme === 'dark');
         
         // Initialize header first
