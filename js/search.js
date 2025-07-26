@@ -140,6 +140,13 @@ function setupSearchEvents() {
             hideSuggestions();
         }
     });
+    
+    // Initialize custom dropdowns after a short delay
+    setTimeout(() => {
+        if (typeof initializeCustomDropdowns === 'function') {
+            initializeCustomDropdowns();
+        }
+    }, 100);
 }
 
 function handleSearchInput(e) {
@@ -357,8 +364,22 @@ function displayMovies(movies) {
 
 function clearAllFilters() {
     document.getElementById('search-input').value = '';
-    document.getElementById('genre-filter').value = '';
-    document.getElementById('sort-filter').value = 'popularity.desc';
+    
+    // Clear custom dropdowns if they exist
+    const genreFilter = document.getElementById('genre-filter');
+    const sortFilter = document.getElementById('sort-filter');
+    
+    if (genreFilter.customDropdown) {
+        genreFilter.customDropdown.setValue('');
+    } else {
+        genreFilter.value = '';
+    }
+    
+    if (sortFilter.customDropdown) {
+        sortFilter.customDropdown.setValue('popularity.desc');
+    } else {
+        sortFilter.value = 'popularity.desc';
+    }
     
     hideSuggestions();
     hideSearchInfo();

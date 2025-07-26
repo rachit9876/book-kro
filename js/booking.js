@@ -178,6 +178,13 @@ function showBookingModal(movie) {
     try {
         document.body.insertAdjacentHTML('beforeend', bookingModal);
         setupBookingEvents(movie);
+        
+        // Initialize custom dropdown for theater selection
+        setTimeout(() => {
+            if (typeof initializeCustomDropdowns === 'function') {
+                initializeCustomDropdowns();
+            }
+        }, 100);
     } catch (error) {
         console.error('Error setting up booking modal:', error);
         showError('Failed to open booking modal. Please try again.');
