@@ -39,6 +39,7 @@ Book-kro/
 │   ├── api.js       # TMDB API integration
 │   ├── app.js       # Main application logic
 │   ├── booking.js   # Ticket booking functionality
+│   ├── customDropdown.js # Custom dropdown component
 │   ├── debug.js     # Development debugging utilities
 │   ├── header.js    # Header component with navigation
 │   ├── movieCard.js # Movie card component
@@ -71,15 +72,16 @@ Book-kro/
 The application is built using reusable JavaScript components organized in the `js/` folder:
 
 - **API Component** (`api.js`): TMDB API integration with request handling and image URL generation
+- **App Component** (`app.js`): Main application logic, state management, error handling, and navigation
+- **Booking Component** (`booking.js`): Complete ticket booking flow with seat selection and validation
+- **Custom Dropdown Component** (`customDropdown.js`): Mobile-friendly dropdown component with search functionality
+- **Debug Component** (`debug.js`): Development utilities for testing and debugging
 - **Header Component** (`header.js`): Navigation bar with theme toggle, mobile menu, and tab switching
 - **Movie Card Component** (`movieCard.js`): Reusable cards for displaying movie information with lazy loading
 - **Movie Modal Component** (`movieModal.js`): Detailed movie information popup with booking integration
-- **Search Component** (`search.js`): Advanced search with suggestions, filters, and real-time results
 - **Pagination Component** (`pagination.js`): Navigate through movie pages with keyboard support
-- **Booking Component** (`booking.js`): Complete ticket booking flow with seat selection and validation
 - **Payment Component** (`payment.js`): QR code payment processing and booking confirmation
-- **App Component** (`app.js`): Main application logic, state management, and error handling
-- **Debug Component** (`debug.js`): Development utilities for testing and debugging
+- **Search Component** (`search.js`): Advanced search with suggestions, filters, and real-time results
 
 All components are modular, reusable, and follow modern JavaScript practices with proper error handling and accessibility features.
 
