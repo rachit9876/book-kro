@@ -1,4 +1,4 @@
-# 🎬 Book-kro (Try Now)[http://book-kro.pages.dev/]
+# 🎬 Book-kro (👉 [Try Now](http://book-kro.pages.dev/) )
 
 A modern movie booking web application that allows users to discover movies, check showtimes, and book tickets online.
 
