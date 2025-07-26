@@ -37,11 +37,11 @@ function createHeader() {
         <!-- Mobile Navigation -->
         <nav id="mobile-menu" class="hidden md:hidden mt-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 -mx-4 px-4 py-4 space-y-3">
             <a href="#" id="mobile-movies-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                📽️ Movies
+                Movies (Home)
             </a>
 
             <a href="#" id="mobile-bookings-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                🎫 My Bookings
+                My Bookings
             </a>
             
             <!-- Mobile theme toggle -->
@@ -213,18 +213,10 @@ function toggleTheme() {
     if (isDark) {
         html.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-
     } else {
         html.classList.add('dark');
         localStorage.setItem('theme', 'dark');
-
     }
-    
-    // Animate theme transition
-    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-    setTimeout(() => {
-        document.body.style.transition = '';
-    }, 300);
 }
 
 // Add CSS animations
@@ -258,5 +250,7 @@ style.textContent = `
             opacity: .5;
         }
     }
+    
+
 `;
 document.head.appendChild(style);

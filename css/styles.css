@@ -5,6 +5,16 @@
     box-sizing: border-box;
 }
 
+/* Optimized theme transitions - only for key elements */
+body,
+header,
+#mobile-menu,
+#mobile-theme-toggle,
+.movie-card {
+    transition: background-color 0.2s ease, color 0.2s ease;
+    will-change: background-color, color;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
@@ -110,6 +120,8 @@ img.loaded {
     input, select, textarea {
         font-size: 16px;
     }
+    
+
 }
 
 /* Reduce motion for accessibility */
@@ -121,6 +133,15 @@ img.loaded {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+/* Respect user's motion preferences but keep theme transitions */
+@media (prefers-reduced-motion: no-preference) {
+    /* Enhanced theme transition timing for smooth experience */
+    html.dark,
+    html:not(.dark) {
+        transition: color-scheme 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 }
 
@@ -138,6 +159,15 @@ img.loaded {
 /* Dark mode specific optimizations */
 .dark {
     color-scheme: dark;
+}
+
+/* Minimal mobile theme transitions */
+@media (max-width: 640px) {
+    #mobile-menu,
+    #mobile-theme-toggle {
+        transition: background-color 0.2s ease;
+        transform: translateZ(0); /* GPU acceleration */
+    }
 }
 
 /* Print styles */
@@ -191,6 +221,8 @@ img.loaded {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .loading-overlay {
