@@ -10,6 +10,14 @@ function showBookingModal(movie) {
         return;
     }
     
+    // Check if mobile view
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile) {
+        showMobileBookingPage(movie);
+        return;
+    }
+    
     const currentDate = new Date();
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 30); // Allow booking up to 30 days ahead
@@ -23,7 +31,7 @@ function showBookingModal(movie) {
                     <!-- Header -->
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Book Tickets</h2>
+                            <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400">Book Tickets</h2>
                             <p class="text-gray-600 dark:text-gray-400 mt-1">${movie.title}</p>
                         </div>
                         <button id="close-booking-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Close booking modal">
@@ -43,7 +51,7 @@ function showBookingModal(movie) {
                                 </svg>
                                 Select Theater
                             </label>
-                            <select id="theater-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                            <select id="theater-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors" required>
                                 <option value="">Choose a theater...</option>
                                 <option value="PVR Cinemas - Mall Road">PVR Cinemas - Mall Road</option>
                                 <option value="INOX - City Center">INOX - City Center</option>
@@ -52,6 +60,8 @@ function showBookingModal(movie) {
                                 <option value="Fun Cinemas - Metro Mall">Fun Cinemas - Metro Mall</option>
                             </select>
                         </div>
+
+                        
                         
                         <!-- Date Selection -->
                         <div>
@@ -61,7 +71,7 @@ function showBookingModal(movie) {
                                 </svg>
                                 Select Date
                             </label>
-                            <input type="date" id="date-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" 
+                            <input type="date" id="date-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors" 
                                    min="${formatDate(currentDate)}" max="${formatDate(maxDate)}" required>
                         </div>
                         
@@ -75,7 +85,7 @@ function showBookingModal(movie) {
                             </label>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 ${generateShowTimes().map(time => `
-                                    <button type="button" class="show-time-btn px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500" data-time="${time.time}" data-price="${time.price}">
+                                    <button type="button" class="show-time-btn px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-purple-500 hover:text-white hover:border-purple-500 transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500" data-time="${time.time}" data-price="${time.price}">
                                         <div>${time.time}</div>
                                         <div class="text-xs opacity-75">₹${time.price}</div>
                                     </button>
@@ -113,17 +123,17 @@ function showBookingModal(movie) {
                                 Seat Type
                             </label>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-500 transition-all duration-200 text-left" data-type="regular" data-multiplier="1">
+                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-purple-500 transition-all duration-200 text-left" data-type="regular" data-multiplier="1">
                                     <div class="font-medium">Regular</div>
                                     <div class="text-sm text-gray-500">Standard seating</div>
                                     <div class="text-xs text-green-600 font-medium">Base price</div>
                                 </button>
-                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-500 transition-all duration-200 text-left" data-type="premium" data-multiplier="1.5">
+                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-purple-500 transition-all duration-200 text-left" data-type="premium" data-multiplier="1.5">
                                     <div class="font-medium">Premium</div>
                                     <div class="text-sm text-gray-500">Better view & comfort</div>
                                     <div class="text-xs text-blue-600 font-medium">+50% price</div>
                                 </button>
-                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-500 transition-all duration-200 text-left" data-type="recliner" data-multiplier="2">
+                                <button type="button" class="seat-type-btn p-4 border border-gray-300 dark:border-gray-600 rounded-xl hover:border-purple-500 transition-all duration-200 text-left" data-type="recliner" data-multiplier="2">
                                     <div class="font-medium">Recliner</div>
                                     <div class="text-sm text-gray-500">Luxury seating</div>
                                     <div class="text-xs text-purple-600 font-medium">+100% price</div>
@@ -151,6 +161,10 @@ function showBookingModal(movie) {
                                     <span class="text-gray-600 dark:text-gray-400">Time:</span>
                                     <span id="summary-time">Select show time</span>
                                 </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Email:</span>
+                                    <span id="summary-email">Enter email</span>
+                                </div>
                                 <hr class="border-gray-300 dark:border-gray-600">
                                 <div class="flex justify-between font-bold text-lg">
                                     <span>Total:</span>
@@ -159,8 +173,10 @@ function showBookingModal(movie) {
                             </div>
                         </div>
                         
+                        
+                        
                         <!-- Proceed to Payment Button -->
-                        <button type="submit" id="confirm-booking" class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2" disabled>
+                        <button type="submit" id="confirm-booking" class="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2" disabled>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
@@ -209,7 +225,8 @@ function setupBookingEvents(movie) {
         timePrice: 0,
         tickets: 1,
         seatType: null,
-        seatMultiplier: 1
+        seatMultiplier: 1,
+        email: null
     };
     
     // Close modal events
@@ -222,6 +239,7 @@ function setupBookingEvents(movie) {
     const form = document.getElementById('booking-form');
     const theaterSelect = document.getElementById('theater-select');
     const dateSelect = document.getElementById('date-select');
+    const emailInput = document.getElementById('email-input');
     const ticketCountDisplay = document.getElementById('ticket-count-display');
     const ticketCountInput = document.getElementById('ticket-count');
     const confirmButton = document.getElementById('confirm-booking');
@@ -243,16 +261,23 @@ function setupBookingEvents(movie) {
         validateForm();
     });
     
+    // Email input
+    emailInput.addEventListener('input', (e) => {
+        bookingState.email = e.target.value;
+        document.getElementById('summary-email').textContent = e.target.value || 'Enter email';
+        validateForm();
+    });
+    
     // Show time selection
     document.querySelectorAll('.show-time-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             // Remove previous selection
             document.querySelectorAll('.show-time-btn').forEach(b => {
-                b.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+                b.classList.remove('bg-purple-500', 'text-white', 'border-purple-500');
             });
             
             // Add selection to clicked button
-            e.currentTarget.classList.add('bg-blue-500', 'text-white', 'border-blue-500');
+            e.currentTarget.classList.add('bg-purple-500', 'text-white', 'border-purple-500');
             
             bookingState.time = e.currentTarget.dataset.time;
             bookingState.timePrice = parseInt(e.currentTarget.dataset.price);
@@ -285,11 +310,11 @@ function setupBookingEvents(movie) {
         btn.addEventListener('click', (e) => {
             // Remove previous selection
             document.querySelectorAll('.seat-type-btn').forEach(b => {
-                b.classList.remove('bg-blue-50', 'border-blue-500', 'dark:bg-blue-900');
+                b.classList.remove('bg-purple-50', 'border-purple-500', 'dark:bg-purple-900');
             });
             
             // Add selection to clicked button
-            e.currentTarget.classList.add('bg-blue-50', 'border-blue-500', 'dark:bg-blue-900');
+            e.currentTarget.classList.add('bg-purple-50', 'border-purple-500', 'dark:bg-purple-900');
             
             bookingState.seatType = e.currentTarget.dataset.type;
             bookingState.seatMultiplier = parseFloat(e.currentTarget.dataset.multiplier);
@@ -332,16 +357,18 @@ function setupBookingEvents(movie) {
         const isValid = bookingState.theater && 
                        bookingState.date && 
                        bookingState.time && 
-                       bookingState.seatType;
+                       bookingState.seatType &&
+                       bookingState.email && 
+                       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
         
         confirmButton.disabled = !isValid;
         
         if (isValid) {
             confirmButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
-            confirmButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            confirmButton.classList.add('bg-purple-600', 'hover:bg-purple-700');
         } else {
             confirmButton.classList.add('bg-gray-400', 'cursor-not-allowed');
-            confirmButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            confirmButton.classList.remove('bg-purple-600', 'hover:bg-purple-700');
         }
         
         return isValid;
@@ -352,8 +379,8 @@ function setupBookingEvents(movie) {
 
 function showBookingSuccessModal(booking) {
     const successModal = `
-        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 text-center animate-bounce-in">
+        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 md:p-4">
+            <div class="bg-white dark:bg-gray-800 md:rounded-2xl max-w-md w-full h-full md:h-auto p-4 md:p-6 text-center animate-bounce-in flex flex-col justify-center">
                 <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -371,12 +398,13 @@ function showBookingSuccessModal(booking) {
                         <div><strong>Theater:</strong> ${booking.theater}</div>
                         <div><strong>Date & Time:</strong> ${booking.date} at ${booking.time}</div>
                         <div><strong>Tickets:</strong> ${booking.tickets} (${booking.seatType})</div>
+                        <div><strong>Email:</strong> ${booking.email}</div>
                         <div><strong>Total:</strong> ₹${booking.total}</div>
                     </div>
                 </div>
                 
                 <div class="flex gap-3">
-                    <button id="view-bookings" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors">
+                    <button id="view-bookings" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition-colors">
                         View Bookings
                     </button>
                     <button id="close-success" class="flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 py-3 rounded-lg transition-colors">
@@ -406,10 +434,287 @@ function showBookingSuccessModal(booking) {
     }, 10000);
 }
 
+function showMobileBookingPage(movie) {
+    const currentDate = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(currentDate.getDate() + 30);
+    const formatDate = (date) => date.toISOString().split('T')[0];
+    
+    const bookingPage = `
+        <div id="mobile-booking-page" class="fixed inset-0 bg-white dark:bg-gray-900 z-50 overflow-y-auto">
+            <div class="min-h-screen">
+                <!-- Header -->
+                <div class="bg-purple-600 text-white p-4 flex items-center">
+                    <button id="back-to-home" class="mr-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-bold">Book Tickets</h1>
+                        <p class="text-purple-100 text-sm">${movie.title}</p>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-4 space-y-6">
+                    <form id="mobile-booking-form" class="space-y-6">
+                        <!-- Theater Selection -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                Select Theater
+                            </label>
+                            <select id="mobile-theater-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                                <option value="">Choose a theater...</option>
+                                <option value="PVR Cinemas - Mall Road">PVR Cinemas - Mall Road</option>
+                                <option value="INOX - City Center">INOX - City Center</option>
+                                <option value="Cinepolis - Downtown">Cinepolis - Downtown</option>
+                                <option value="Miraj Cinemas - Plaza">Miraj Cinemas - Plaza</option>
+                                <option value="Fun Cinemas - Metro Mall">Fun Cinemas - Metro Mall</option>
+                            </select>
+                        </div>
+                        
+                    <!-- Email Address -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                Email Address (for ticket delivery)
+                            </label>
+                            <input type="email" id="email-input" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors" 
+                                   placeholder="Enter your email address" required>
+                        </div>
+
+                        <!-- Date Selection -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                Select Date
+                            </label>
+                            <input type="date" id="mobile-date-select" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                                   min="${formatDate(currentDate)}" max="${formatDate(maxDate)}" required>
+                        </div>
+                        
+                        <!-- Show Time Selection -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                Select Show Time
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                ${generateShowTimes().map(time => `
+                                    <button type="button" class="mobile-show-time-btn px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-purple-500 hover:text-white transition-all text-sm font-medium" data-time="${time.time}" data-price="${time.price}">
+                                        <div>${time.time}</div>
+                                        <div class="text-xs opacity-75">₹${time.price}</div>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Ticket Count -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                Number of Tickets
+                            </label>
+                            <div class="flex items-center justify-center space-x-4">
+                                <button type="button" id="mobile-decrease-tickets" class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </button>
+                                <span id="mobile-ticket-count-display" class="text-3xl font-bold min-w-[4rem] text-center">1</span>
+                                <button type="button" id="mobile-increase-tickets" class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Seat Type Selection -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                Seat Type
+                            </label>
+                            <div class="space-y-3">
+                                <button type="button" class="mobile-seat-type-btn w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl text-left" data-type="regular" data-multiplier="1">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium">Regular</div>
+                                            <div class="text-sm text-gray-500">Standard seating</div>
+                                        </div>
+                                        <div class="text-green-600 font-medium">Base price</div>
+                                    </div>
+                                </button>
+                                <button type="button" class="mobile-seat-type-btn w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl text-left" data-type="premium" data-multiplier="1.5">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium">Premium</div>
+                                            <div class="text-sm text-gray-500">Better view & comfort</div>
+                                        </div>
+                                        <div class="text-blue-600 font-medium">+50%</div>
+                                    </div>
+                                </button>
+                                <button type="button" class="mobile-seat-type-btn w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl text-left" data-type="recliner" data-multiplier="2">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium">Recliner</div>
+                                            <div class="text-sm text-gray-500">Luxury seating</div>
+                                        </div>
+                                        <div class="text-purple-600 font-medium">+100%</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                <!-- Fixed Bottom Bar -->
+                <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-lg font-medium">Total:</span>
+                        <span class="text-2xl font-bold text-green-600">₹<span id="mobile-total-price">0</span></span>
+                    </div>
+                    <button type="submit" form="mobile-booking-form" id="mobile-confirm-booking" class="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-4 rounded-xl font-medium" disabled>
+                        Proceed to Payment
+                    </button>
+                </div>
+                
+                <!-- Bottom padding for fixed bar -->
+                <div class="h-32"></div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', bookingPage);
+    setupMobileBookingEvents(movie);
+}
+
+function setupMobileBookingEvents(movie) {
+    let bookingState = {
+        theater: null,
+        date: null,
+        time: null,
+        timePrice: 0,
+        tickets: 1,
+        seatType: null,
+        seatMultiplier: 1,
+        email: null
+    };
+    
+    // Back button
+    document.getElementById('back-to-home').addEventListener('click', closeMobileBookingPage);
+    
+    // Form elements
+    const theaterSelect = document.getElementById('mobile-theater-select');
+    const dateSelect = document.getElementById('mobile-date-select');
+    const emailInput = document.getElementById('email-input');
+    const confirmButton = document.getElementById('mobile-confirm-booking');
+    
+    // Set default date
+    const today = new Date().toISOString().split('T')[0];
+    dateSelect.value = today;
+    bookingState.date = today;
+    
+    // Event listeners
+    theaterSelect.addEventListener('change', (e) => {
+        bookingState.theater = e.target.value;
+        validateMobileForm();
+    });
+    
+    dateSelect.addEventListener('change', (e) => {
+        bookingState.date = e.target.value;
+        validateMobileForm();
+    });
+    
+    emailInput.addEventListener('input', (e) => {
+        bookingState.email = e.target.value;
+        validateMobileForm();
+    });
+    
+    // Show time selection
+    document.querySelectorAll('.mobile-show-time-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.mobile-show-time-btn').forEach(b => {
+                b.classList.remove('bg-purple-500', 'text-white');
+            });
+            e.currentTarget.classList.add('bg-purple-500', 'text-white');
+            
+            bookingState.time = e.currentTarget.dataset.time;
+            bookingState.timePrice = parseInt(e.currentTarget.dataset.price);
+            updateMobileTotalPrice();
+            validateMobileForm();
+        });
+    });
+    
+    // Ticket count
+    document.getElementById('mobile-decrease-tickets').addEventListener('click', () => {
+        if (bookingState.tickets > 1) {
+            bookingState.tickets--;
+            document.getElementById('mobile-ticket-count-display').textContent = bookingState.tickets;
+            updateMobileTotalPrice();
+        }
+    });
+    
+    document.getElementById('mobile-increase-tickets').addEventListener('click', () => {
+        if (bookingState.tickets < 10) {
+            bookingState.tickets++;
+            document.getElementById('mobile-ticket-count-display').textContent = bookingState.tickets;
+            updateMobileTotalPrice();
+        }
+    });
+    
+    // Seat type selection
+    document.querySelectorAll('.mobile-seat-type-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.mobile-seat-type-btn').forEach(b => {
+                b.classList.remove('bg-purple-50', 'border-purple-500');
+            });
+            e.currentTarget.classList.add('bg-purple-50', 'border-purple-500');
+            
+            bookingState.seatType = e.currentTarget.dataset.type;
+            bookingState.seatMultiplier = parseFloat(e.currentTarget.dataset.multiplier);
+            updateMobileTotalPrice();
+            validateMobileForm();
+        });
+    });
+    
+    // Form submission
+    document.getElementById('mobile-booking-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (validateMobileForm()) {
+            closeMobileBookingPage();
+            showPaymentModal(movie, bookingState);
+        }
+    });
+    
+    function updateMobileTotalPrice() {
+        if (bookingState.timePrice && bookingState.seatMultiplier) {
+            const total = Math.round(bookingState.timePrice * bookingState.tickets * bookingState.seatMultiplier);
+            document.getElementById('mobile-total-price').textContent = total;
+        }
+    }
+    
+    function validateMobileForm() {
+        const isValid = bookingState.theater && 
+                       bookingState.date && 
+                       bookingState.time && 
+                       bookingState.seatType &&
+                       bookingState.email && 
+                       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
+        
+        confirmButton.disabled = !isValid;
+        return isValid;
+    }
+}
+
+function closeMobileBookingPage() {
+    const page = document.getElementById('mobile-booking-page');
+    if (page) page.remove();
+}
+
 function closeBookingModal() {
     const modal = document.getElementById('booking-modal');
     if (modal) {
         modal.classList.add('fade-out');
         setTimeout(() => modal.remove(), 300);
     }
+    closeMobileBookingPage();
 }

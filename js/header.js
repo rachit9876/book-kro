@@ -2,18 +2,18 @@ function createHeader() {
     return `
         <div class="flex justify-between items-center px-4">
             <div class="flex items-center space-x-4">
-                <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity duration-200" id="home-logo">
+                <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity duration-200" id="home-logo">
                     🎬 Book-kro
                 </h1>
             </div>
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-6">
-                <a href="#" id="movies-tab" class="hover:text-blue-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <a href="#" id="movies-tab" class="hover:text-purple-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     Movies
                 </a>
 
-                <a href="#" id="bookings-tab" class="hover:text-blue-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <a href="#" id="bookings-tab" class="hover:text-purple-400 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     My Bookings
                 </a>
                 
@@ -36,11 +36,11 @@ function createHeader() {
         
         <!-- Mobile Navigation -->
         <nav id="mobile-menu" class="hidden md:hidden mt-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 -mx-4 px-4 py-4 space-y-3">
-            <a href="#" id="mobile-movies-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="#" id="mobile-movies-tab" class="block hover:text-purple-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 Movies (Home)
             </a>
 
-            <a href="#" id="mobile-bookings-tab" class="block hover:text-blue-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="#" id="mobile-bookings-tab" class="block hover:text-purple-400 transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 My Bookings
             </a>
             
@@ -191,17 +191,17 @@ function updateActiveTab(activeTab) {
         const mobileElement = document.getElementById(`mobile-${tab}-tab`);
         
         if (element) {
-            element.classList.toggle('text-blue-600', tab === activeTab);
+            element.classList.toggle('text-purple-600', tab === activeTab);
             element.classList.toggle('font-semibold', tab === activeTab);
-            element.classList.toggle('bg-blue-50', tab === activeTab);
-            element.classList.toggle('dark:bg-blue-900', tab === activeTab);
+            element.classList.toggle('bg-purple-50', tab === activeTab);
+            element.classList.toggle('dark:bg-purple-900', tab === activeTab);
         }
         
         if (mobileElement) {
-            mobileElement.classList.toggle('text-blue-600', tab === activeTab);
+            mobileElement.classList.toggle('text-purple-600', tab === activeTab);
             mobileElement.classList.toggle('font-semibold', tab === activeTab);
-            mobileElement.classList.toggle('bg-blue-50', tab === activeTab);
-            mobileElement.classList.toggle('dark:bg-blue-900', tab === activeTab);
+            mobileElement.classList.toggle('bg-purple-50', tab === activeTab);
+            mobileElement.classList.toggle('dark:bg-purple-900', tab === activeTab);
         }
     });
 }

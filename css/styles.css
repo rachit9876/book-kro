@@ -47,13 +47,13 @@ html {
 
 /* Enhanced focus styles for accessibility */
 .focus-visible {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid #8b5cf6;
     outline-offset: 2px;
 }
 
 /* Better button states */
 button:focus-visible {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid #8b5cf6;
     outline-offset: 2px;
 }
 
@@ -417,8 +417,8 @@ img.loaded {
 }
 
 .custom-dropdown:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .dropdown-list {
@@ -460,7 +460,7 @@ img.loaded {
     content: '✓';
     position: absolute;
     right: 12px;
-    color: #3b82f6;
+    color: #8b5cf6;
     font-weight: bold;
 }
 

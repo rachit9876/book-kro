@@ -16,7 +16,7 @@ function createMovieModal(movie) {
 
     return `
         <div id="movie-modal" class="fixed inset-0 bg-black bg-opacity-0 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4 transition-all duration-300">
-            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto transform translate-y-full sm:translate-y-0 sm:scale-75 transition-all duration-300 shadow-2xl">
+            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-4xl h-[90vh] sm:max-h-[90vh] overflow-y-auto transform translate-y-full sm:translate-y-0 sm:scale-75 transition-all duration-300 shadow-2xl">
                 
                 <!-- Header with backdrop -->
                 <div class="relative">
@@ -72,6 +72,22 @@ function createMovieModal(movie) {
                                 ${genres ? `<span>• ${genres}</span>` : ''}
                             </div>
                             
+                            <!-- Action buttons -->
+                            <div class="flex gap-3 mb-6">
+                                <button id="book-tickets" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2">
+                                    
+                                    Book Tickets
+                                </button>
+                                
+                                <!-- Share button -->
+                                <button id="share-movie" class="bg-black hover:bg-green-700 text-white px-6 py-3 rounded-full transition-colors duration-200 flex items-center justify-center gap-2" title="Share this movie">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                                    </svg>
+                                    Share
+                                </button>
+                            </div>
+                            
                             <!-- Overview -->
                             <div class="mb-6">
                                 <h3 class="font-semibold mb-2">Overview</h3>
@@ -87,23 +103,6 @@ function createMovieModal(movie) {
                                     <p class="text-gray-600 dark:text-gray-400 text-sm">${cast}</p>
                                 </div>
                             ` : ''}
-                            
-                            <!-- Action buttons -->
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <button id="book-tickets" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2">
-                                    
-                                    Book Tickets
-                                </button>
-                                
-
-                                
-                                <!-- Share button -->
-                                <button id="share-movie" class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl transition-colors duration-200 flex items-center justify-center" title="Share this movie">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
-                                    </svg>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,7 +117,7 @@ async function showMovieModal(movieId) {
         document.body.insertAdjacentHTML('beforeend', `
             <div id="movie-modal-loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center">
-                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
                     <p class="text-lg font-medium">Loading movie details...</p>
                 </div>
             </div>
@@ -134,6 +133,9 @@ async function showMovieModal(movieId) {
         
         const modal = document.getElementById('movie-modal');
         const content = modal.querySelector('div');
+        
+        // Disable body scroll
+        document.body.style.overflow = 'hidden';
         
         // Animate modal in
         setTimeout(() => {
@@ -187,6 +189,9 @@ function setupMovieModalEvents(movie) {
 function closeMovieModal() {
     const modal = document.getElementById('movie-modal');
     if (modal) {
+        // Re-enable body scroll
+        document.body.style.overflow = '';
+        
         const content = modal.querySelector('div');
         modal.classList.remove('bg-opacity-50');
         modal.classList.add('bg-opacity-0');
@@ -251,7 +256,7 @@ modalStyles.textContent = `
     
     /* Button hover effects */
     button:focus-visible {
-        outline: 2px solid #3b82f6;
+        outline: 2px solid #8b5cf6;
         outline-offset: 2px;
     }
 `;

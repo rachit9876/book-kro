@@ -2,10 +2,10 @@ function showPaymentModal(movie, bookingState) {
     const total = Math.round(bookingState.timePrice * bookingState.tickets * bookingState.seatMultiplier);
     
     const paymentModal = `
-        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md md:max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 md:p-4">
+            <div class="bg-white dark:bg-gray-800 md:rounded-2xl max-w-md md:max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto shadow-2xl">
                 <div class="p-6">
-                    <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 text-center">Payment Gateway</h2>
+                    <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6 text-center">Payment Gateway</h2>
                     
                     <div class="flex flex-col md:flex-row gap-6">
                         <!-- Booking Summary -->
@@ -28,6 +28,10 @@ function showPaymentModal(movie, bookingState) {
                                     <div class="flex justify-between">
                                         <span class="text-gray-600 dark:text-gray-400">Tickets:</span>
                                         <span class="font-medium">${bookingState.tickets} (${bookingState.seatType})</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600 dark:text-gray-400">Email:</span>
+                                        <span class="font-medium">${bookingState.email}</span>
                                     </div>
                                     <hr class="border-gray-300 dark:border-gray-600">
                                     <div class="flex justify-between font-bold text-lg">
@@ -102,6 +106,7 @@ function processPaymentAndConfirmBooking(movie, bookingState) {
         time: bookingState.time,
         tickets: bookingState.tickets,
         seatType: bookingState.seatType,
+        email: bookingState.email,
         total: total,
         timestamp: new Date().toISOString(),
         status: 'confirmed',

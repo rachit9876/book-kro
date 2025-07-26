@@ -25,7 +25,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/darkMode.svg">
     
     <!-- Theme Color -->
-    <meta name="theme-color" content="#3b82f6">
+    <meta name="theme-color" content="#8b5cf6">
     
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href="https://api.themoviedb.org">
@@ -66,7 +66,7 @@
         
         /* Enhanced focus styles for accessibility */
         .focus-visible {
-            outline: 2px solid #3b82f6;
+            outline: 2px solid #8b5cf6;
             outline-offset: 2px;
         }
         
@@ -115,21 +115,21 @@
     <!-- Loading overlay -->
     <div id="loading-overlay" class="fixed inset-0 bg-white/90 dark:bg-gray-900/90 z-50 flex items-center justify-center">
         <div class="text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
             <p class="text-lg font-medium">Loading Book-kro...</p>
             <p class="text-sm text-gray-500 mt-2">Preparing your movie experience</p>
         </div>
     </div>
     
     <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded z-50">
         Skip to main content
     </a>
     
 
     
     <div id="app" class="opacity-0 transition-opacity duration-500">
-        <header id="header" class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 py-2 px-4 transition-colors sticky top-0 z-40 shadow-sm"></header>
+        <header id="header" class="bg-gray-100 dark:bg-black border-b border-gray-200 dark:border-gray-700 py-2 px-4 transition-colors sticky top-0 z-40 shadow-sm"></header>
         
         <main id="main-content" class="py-6 px-2">
             <!-- Error boundary -->

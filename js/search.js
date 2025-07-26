@@ -24,13 +24,13 @@ function createSearchBar() {
                     
                     <!-- Loading indicator -->
                     <div id="search-loading" class="absolute inset-y-0 right-8 flex items-center hidden">
-                        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
                     </div>
                 </div>
                 
                 <!-- Filter controls -->
                 <div class="flex gap-2 md:gap-4">
-                    <select id="genre-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
+                    <select id="genre-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
                         <option value="">All Genres</option>
                         <option value="28">Action</option>
                         <option value="35">Comedy</option>
@@ -44,7 +44,7 @@ function createSearchBar() {
                         <option value="14">Fantasy</option>
                     </select>
                     
-                    <select id="sort-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
+                    <select id="sort-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
                         <option value="popularity.desc">Most Popular</option>
                         <option value="vote_average.desc">Highest Rated</option>
                         <option value="release_date.desc">Latest Release</option>
@@ -312,7 +312,7 @@ function navigateSuggestions(direction) {
         }
     }
     
-    suggestions[newIndex].classList.add('suggestion-active', 'bg-blue-100', 'dark:bg-blue-900');
+    suggestions[newIndex].classList.add('suggestion-active', 'bg-purple-100', 'dark:bg-purple-900');
 }
 
 async function filterMovies() {
@@ -462,11 +462,11 @@ function getSortName(sortValue) {
 const searchStyles = document.createElement('style');
 searchStyles.textContent = `
     .suggestion-item.suggestion-active {
-        background-color: rgba(59, 130, 246, 0.1);
+        background-color: rgba(139, 92, 246, 0.1);
     }
     
     .dark .suggestion-item.suggestion-active {
-        background-color: rgba(59, 130, 246, 0.2);
+        background-color: rgba(139, 92, 246, 0.2);
     }
     
     #search-suggestions {

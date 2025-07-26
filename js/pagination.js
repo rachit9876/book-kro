@@ -1,127 +1,148 @@
 function createPagination(currentPage, totalPages, onPageChange) {
     if (totalPages <= 1) return '';
     
-    const maxVisiblePages = 5;
+    const isMobile = window.innerWidth < 640;
+    const maxVisiblePages = isMobile ? 3 : 5;
     const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
     
     let pages = [];
     
-    // Add "First" button if not on first page
-    if (currentPage > 1) {
+    // Mobile: Only show prev/next arrows and current page
+    if (isMobile) {
+        // Previous button
+        if (currentPage > 1) {
+            pages.push(`
+                <button 
+                    class="pagination-btn w-10 h-10 flex items-center justify-center bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors touch-manipulation" 
+                    data-page="${currentPage - 1}"
+                    aria-label="Previous page"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+            `);
+        }
+        
+        // Current page indicator
         pages.push(`
-            <button 
-                class="pagination-btn px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
-                data-page="1"
-                aria-label="Go to first page"
-            >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                </svg>
-            </button>
+            <div class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm">
+                ${currentPage} / ${totalPages}
+            </div>
         `);
         
-        pages.push(`
-            <button 
-                class="pagination-btn px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" 
-                data-page="${currentPage - 1}"
-                aria-label="Go to previous page"
-            >
-                Previous
-            </button>
-        `);
-    }
-    
-    // Add ellipsis if needed
-    if (startPage > 1) {
-        pages.push(`
-            <span class="px-3 py-2 text-gray-500 dark:text-gray-400">...</span>
-        `);
-    }
-    
-    // Add page numbers
-    for (let i = startPage; i <= endPage; i++) {
-        const isActive = i === currentPage;
-        pages.push(`
-            <button 
-                class="pagination-btn px-4 py-2 text-sm rounded-lg transition-colors ${
-                    isActive 
-                        ? 'bg-blue-600 text-white font-semibold' 
-                        : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
-                }" 
-                data-page="${i}"
-                ${isActive ? 'disabled aria-current="page"' : ''}
-                aria-label="Go to page ${i}"
-            >
-                ${i}
-            </button>
-        `);
-    }
-    
-    // Add ellipsis if needed
-    if (endPage < totalPages) {
-        pages.push(`
-            <span class="px-3 py-2 text-gray-500 dark:text-gray-400">...</span>
-        `);
-    }
-    
-    // Add "Next" and "Last" buttons if not on last page
-    if (currentPage < totalPages) {
-        pages.push(`
-            <button 
-                class="pagination-btn px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" 
-                data-page="${currentPage + 1}"
-                aria-label="Go to next page"
-            >
-                Next
-            </button>
-        `);
+        // Next button
+        if (currentPage < totalPages) {
+            pages.push(`
+                <button 
+                    class="pagination-btn w-10 h-10 flex items-center justify-center bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors touch-manipulation" 
+                    data-page="${currentPage + 1}"
+                    aria-label="Next page"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            `);
+        }
+    } else {
+        // Desktop: Full pagination
+        if (currentPage > 1) {
+            pages.push(`
+                <button 
+                    class="pagination-btn px-3 py-2 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors" 
+                    data-page="1"
+                    aria-label="First page"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                    </svg>
+                </button>
+            `);
+            
+            pages.push(`
+                <button 
+                    class="pagination-btn px-4 py-2 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors" 
+                    data-page="${currentPage - 1}"
+                    aria-label="Previous page"
+                >
+                    Previous
+                </button>
+            `);
+        }
         
-        pages.push(`
-            <button 
-                class="pagination-btn px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" 
-                data-page="${totalPages}"
-                aria-label="Go to last page"
-            >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                </svg>
-            </button>
-        `);
+        if (startPage > 1) {
+            pages.push(`<span class="px-3 py-2 text-gray-500 dark:text-gray-400">...</span>`);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const isActive = i === currentPage;
+            pages.push(`
+                <button 
+                    class="pagination-btn px-4 py-2 text-sm rounded-lg transition-colors ${
+                        isActive 
+                            ? 'bg-purple-600 text-white font-semibold' 
+                            : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                    }" 
+                    data-page="${i}"
+                    ${isActive ? 'disabled aria-current="page"' : ''}
+                    aria-label="Page ${i}"
+                >
+                    ${i}
+                </button>
+            `);
+        }
+        
+        if (endPage < totalPages) {
+            pages.push(`<span class="px-3 py-2 text-gray-500 dark:text-gray-400">...</span>`);
+        }
+        
+        if (currentPage < totalPages) {
+            pages.push(`
+                <button 
+                    class="pagination-btn px-4 py-2 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors" 
+                    data-page="${currentPage + 1}"
+                    aria-label="Next page"
+                >
+                    Next
+                </button>
+            `);
+            
+            pages.push(`
+                <button 
+                    class="pagination-btn px-3 py-2 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors" 
+                    data-page="${totalPages}"
+                    aria-label="Last page"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            `);
+        }
     }
     
     return `
-        <div class="flex flex-col items-center space-y-4 mt-8">
-            <!-- Page numbers -->
-            <div class="flex flex-wrap justify-center items-center gap-2">
+        <div class="flex flex-col items-center space-y-3 mt-6 px-4">
+            <div class="flex justify-center items-center gap-2">
                 ${pages.join('')}
             </div>
             
-            <!-- Page info -->
-            <div class="text-sm text-gray-600 dark:text-gray-400 text-center">
-                <span class="hidden sm:inline">Showing page</span>
-                <span class="font-medium text-blue-600 dark:text-blue-400">${currentPage}</span>
-                <span class="hidden sm:inline">of</span>
-                <span class="sm:hidden">/</span>
-                <span class="font-medium">${totalPages}</span>
-                <span class="hidden sm:inline">pages</span>
-            </div>
-            
-            <!-- Quick jump (for large page counts) -->
-            ${totalPages > 10 ? `
+            ${!isMobile && totalPages > 10 ? `
                 <div class="flex items-center space-x-2 text-sm">
-                    <label for="page-jump" class="text-gray-600 dark:text-gray-400">Jump to:</label>
                     <input 
                         type="number" 
                         id="page-jump" 
                         min="1" 
                         max="${totalPages}" 
                         value="${currentPage}"
-                        class="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Page"
                     >
                     <button 
                         id="jump-btn" 
-                        class="px-3 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded transition-colors"
+                        class="px-3 py-1 bg-purple-500 hover:bg-purple-600 text-white text-sm rounded transition-colors"
                     >
                         Go
                     </button>
@@ -252,16 +273,14 @@ function handlePaginationKeyboard(e) {
     }
 }
 
-// Enhanced pagination with smooth transitions
 function createLoadingPagination() {
+    const isMobile = window.innerWidth < 640;
     return `
-        <div class="flex justify-center items-center mt-8">
+        <div class="flex justify-center items-center mt-6 px-4">
             <div class="flex space-x-2">
-                <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                ${Array(isMobile ? 3 : 5).fill(0).map(() => 
+                    `<div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-lg animate-pulse"></div>`
+                ).join('')}
             </div>
         </div>
     `;
@@ -270,34 +289,40 @@ function createLoadingPagination() {
 // Add pagination styles
 const paginationStyles = document.createElement('style');
 paginationStyles.textContent = `
+    .pagination-btn {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
     .pagination-btn:focus {
-        outline: 2px solid #3b82f6;
+        outline: 2px solid #8b5cf6;
         outline-offset: 2px;
     }
     
-    .pagination-btn:hover:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    @media (hover: hover) {
+        .pagination-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     }
     
     .pagination-btn:active:not(:disabled) {
-        transform: translateY(0);
+        transform: scale(0.95);
     }
     
     @media (max-width: 640px) {
         .pagination-btn {
-            min-width: 40px;
-            padding: 8px 12px;
+            min-height: 44px;
+            min-width: 44px;
         }
     }
     
-    /* Smooth page transitions */
     #movie-grid {
-        transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
     }
     
     #movie-grid.loading {
-        opacity: 0.5;
+        opacity: 0.6;
     }
 `;
 document.head.appendChild(paginationStyles);
