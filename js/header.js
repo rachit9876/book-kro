@@ -85,11 +85,7 @@ function setupHeaderEvents() {
     
     // Theme toggle events
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-    document.getElementById('mobile-theme-toggle').addEventListener('click', () => {
-        toggleTheme();
-        // Close mobile menu after theme change
-        setTimeout(() => toggleMobileMenu(), 100);
-    });
+    document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
     
     // Desktop navigation
     setupTabNavigation();
