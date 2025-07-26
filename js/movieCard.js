@@ -81,10 +81,10 @@ function createMovieCard(movie, isFavorite = false) {
                 <div class="space-y-2">
                     <!-- Book Now button -->
                     <button 
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg transition-colors duration-200 book-btn text-sm font-medium shadow-sm" 
+                        class="w-full bg-purple-600 hover:bg-blue-700 text-purple-100 py-1 px-3 rounded-full transition-colors duration-200 book-btn text-sm font-medium shadow-sm" 
                         data-movie-id="${movie.id}"
                         aria-label="Book tickets for ${movie.title}">
-                        🎫 Book Now
+                        Book Now
                     </button>
                     
 

@@ -47,7 +47,7 @@ class CustomDropdown {
         wrapper.className = 'custom-dropdown-wrapper relative';
         
         const dropdown = document.createElement('div');
-        dropdown.className = 'custom-dropdown w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors cursor-pointer flex items-center justify-between';
+        dropdown.className = 'custom-dropdown w-full px-5 py-0.5 border border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors cursor-pointer flex items-center justify-between';
         dropdown.setAttribute('tabindex', '0');
         dropdown.setAttribute('role', 'combobox');
         dropdown.setAttribute('aria-expanded', 'false');
