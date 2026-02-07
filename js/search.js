@@ -8,7 +8,7 @@ function createSearchBar() {
                         type="text" 
                         id="search-input" 
                         placeholder="Search movies..." 
-                        class="w-full px-4 py-3 pr-10 rounded-full border border-gray-300 dark:border-gray-600 bg-purple-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                        class="w-full px-5 py-2.5 pr-10 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                         autocomplete="off"
                         spellcheck="false"
                     >
@@ -30,7 +30,7 @@ function createSearchBar() {
                 
                 <!-- Filter controls -->
                 <div class="flex gap-2 md:gap-4">
-                    <select id="genre-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
+                    <select id="genre-filter" class="px-4 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm min-w-0 flex-1 md:flex-none">
                         <option value="">All Genres</option>
                         <option value="28">Action</option>
                         <option value="35">Comedy</option>
@@ -44,7 +44,7 @@ function createSearchBar() {
                         <option value="14">Fantasy</option>
                     </select>
                     
-                    <select id="sort-filter" class="px-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm md:text-base min-w-0 flex-1 md:flex-none">
+                    <select id="sort-filter" class="px-4 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm min-w-0 flex-1 md:flex-none">
                         <option value="popularity.desc">Most Popular</option>
                         <option value="vote_average.desc">Highest Rated</option>
                         <option value="release_date.desc">Latest Release</option>
@@ -83,15 +83,15 @@ function startTypingEffect() {
     let messageIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    
+
     function type() {
         if (searchInput === document.activeElement || searchInput.value.length > 0) {
             setTimeout(type, 2000);
             return;
         }
-        
+
         const currentMessage = messages[messageIndex];
-        
+
         if (!isDeleting && charIndex < currentMessage.length) {
             searchInput.placeholder = currentMessage.substring(0, charIndex + 1);
             charIndex++;
@@ -108,7 +108,7 @@ function startTypingEffect() {
             setTimeout(type, isDeleting ? 1500 : 500);
         }
     }
-    
+
     type();
 }
 
@@ -118,7 +118,7 @@ function setupSearchEvents() {
     const sortFilter = document.getElementById('sort-filter');
     const clearFiltersBtn = document.getElementById('clear-filters');
     const searchSuggestions = document.getElementById('search-suggestions');
-    
+
     startTypingEffect();
 
     // Enhanced search input handler
@@ -130,17 +130,17 @@ function setupSearchEvents() {
     // Filter change handlers
     genreFilter.addEventListener('change', handleFilterChange);
     sortFilter.addEventListener('change', handleFilterChange);
-    
+
     // Clear filters button
     clearFiltersBtn.addEventListener('click', clearAllFilters);
-    
+
     // Click outside to close suggestions
     document.addEventListener('click', (e) => {
         if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
             hideSuggestions();
         }
     });
-    
+
     // Initialize custom dropdowns after a short delay
     setTimeout(() => {
         if (typeof initializeCustomDropdowns === 'function') {
@@ -151,9 +151,9 @@ function setupSearchEvents() {
 
 function handleSearchInput(e) {
     const query = e.target.value.trim();
-    
+
     clearTimeout(searchTimeout);
-    
+
     if (query.length === 0) {
         hideSuggestions();
         hideSearchLoading();
@@ -161,14 +161,14 @@ function handleSearchInput(e) {
         loadPopularMovies();
         return;
     }
-    
+
     if (query.length < 2) {
         hideSuggestions();
         return;
     }
-    
+
     showSearchLoading();
-    
+
     searchTimeout = setTimeout(async () => {
         try {
             await searchMovies(query);
@@ -197,7 +197,7 @@ function handleSearchBlur() {
 function handleSearchKeydown(e) {
     const suggestions = document.getElementById('search-suggestions');
     const activeSuggestion = suggestions.querySelector('.suggestion-active');
-    
+
     if (e.key === 'ArrowDown') {
         e.preventDefault();
         navigateSuggestions('down');
@@ -222,15 +222,15 @@ function handleFilterChange() {
 
 async function searchMovies(query) {
     if (!query || query.length < 2) return;
-    
+
     try {
         const data = await api.searchMovies(query);
-        
+
         if (data && data.results) {
             displayMovies(data.results);
 
         }
-        
+
         hideSearchLoading();
     } catch (error) {
         console.error('Search error:', error);
@@ -241,16 +241,16 @@ async function searchMovies(query) {
 
 async function showSearchSuggestions(query) {
     if (query.length < 2) return;
-    
+
     // Check cache first
     if (searchSuggestionsCache.has(query)) {
         renderSuggestions(searchSuggestionsCache.get(query));
         return;
     }
-    
+
     try {
         const data = await api.searchMovies(query);
-        
+
         if (data && data.results) {
             const suggestions = data.results.slice(0, 5).map(movie => movie.title);
             searchSuggestionsCache.set(query, suggestions);
@@ -264,25 +264,25 @@ async function showSearchSuggestions(query) {
 
 function renderSuggestions(suggestions) {
     const container = document.getElementById('search-suggestions');
-    
+
     if (suggestions.length === 0) {
         hideSuggestions();
         return;
     }
-    
+
     container.innerHTML = suggestions.map(suggestion => `
         <div class="suggestion-item px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150">
             ${suggestion}
         </div>
     `).join('');
-    
+
     // Add click handlers
     container.querySelectorAll('.suggestion-item').forEach(item => {
         item.addEventListener('click', () => {
             selectSuggestion(item.textContent);
         });
     });
-    
+
     container.classList.remove('hidden');
 }
 
@@ -296,22 +296,22 @@ function selectSuggestion(suggestion) {
 function navigateSuggestions(direction) {
     const suggestions = document.querySelectorAll('.suggestion-item');
     const current = document.querySelector('.suggestion-active');
-    
+
     if (suggestions.length === 0) return;
-    
+
     let newIndex = 0;
-    
+
     if (current) {
         current.classList.remove('suggestion-active');
         const currentIndex = Array.from(suggestions).indexOf(current);
-        
+
         if (direction === 'down') {
             newIndex = (currentIndex + 1) % suggestions.length;
         } else {
             newIndex = currentIndex === 0 ? suggestions.length - 1 : currentIndex - 1;
         }
     }
-    
+
     suggestions[newIndex].classList.add('suggestion-active', 'bg-purple-100', 'dark:bg-purple-900');
 }
 
@@ -319,21 +319,21 @@ async function filterMovies() {
     const genre = document.getElementById('genre-filter').value;
     const sort = document.getElementById('sort-filter').value;
     const searchQuery = document.getElementById('search-input').value.trim();
-    
+
     // If there's a search query, don't apply filters
     if (searchQuery) {
         return;
     }
-    
+
     try {
         showSearchLoading();
         const data = await api.discoverMovies({ genre, sort });
-        
+
         if (data && data.results) {
             displayMovies(data.results);
             showSearchInfo(data.results.length, null, { genre, sort });
         }
-        
+
         hideSearchLoading();
     } catch (error) {
         console.error('Filter error:', error);
@@ -344,7 +344,7 @@ async function filterMovies() {
 
 function displayMovies(movies) {
     const movieGrid = document.getElementById('movie-grid');
-    
+
     if (movies.length === 0) {
         const query = document.getElementById('search-input').value.trim();
 
@@ -357,43 +357,43 @@ function displayMovies(movies) {
         `;
         return;
     }
-    
+
     movieGrid.innerHTML = movies.map(movie => createMovieCard(movie)).join('');
     lazyLoadImages();
 }
 
 function clearAllFilters() {
     document.getElementById('search-input').value = '';
-    
+
     // Clear custom dropdowns if they exist
     const genreFilter = document.getElementById('genre-filter');
     const sortFilter = document.getElementById('sort-filter');
-    
+
     if (genreFilter.customDropdown) {
         genreFilter.customDropdown.setValue('');
     } else {
         genreFilter.value = '';
     }
-    
+
     if (sortFilter.customDropdown) {
         sortFilter.customDropdown.setValue('popularity.desc');
     } else {
         sortFilter.value = 'popularity.desc';
     }
-    
+
     hideSuggestions();
     hideSearchInfo();
     updateClearFiltersButton();
-    
+
     loadPopularMovies();
 }
 
 function updateClearFiltersButton() {
     const clearBtn = document.getElementById('clear-filters');
     const hasFilters = document.getElementById('search-input').value ||
-                      document.getElementById('genre-filter').value ||
-                      document.getElementById('sort-filter').value !== 'popularity.desc';
-    
+        document.getElementById('genre-filter').value ||
+        document.getElementById('sort-filter').value !== 'popularity.desc';
+
     clearBtn.classList.toggle('hidden', !hasFilters);
 }
 
@@ -408,9 +408,9 @@ function hideSearchLoading() {
 function showSearchInfo(count, query, filters) {
     const infoElement = document.getElementById('search-info');
     const countElement = document.getElementById('search-results-count');
-    
+
     let message = '';
-    
+
     if (query) {
         message = `Found ${count} results for "${query}"`;
     } else if (filters) {
@@ -418,7 +418,7 @@ function showSearchInfo(count, query, filters) {
         const sortText = getSortName(filters.sort);
         message = `Showing ${count} ${genreText} movies sorted by ${sortText}`;
     }
-    
+
     countElement.textContent = message;
     infoElement.classList.remove('hidden');
 }

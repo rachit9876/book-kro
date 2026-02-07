@@ -28,7 +28,7 @@ html {
 }
 
 .dark .loading-skeleton {
-    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
     background-size: 200% 100%;
 }
 
@@ -159,6 +159,8 @@ img.loaded {
 /* Dark mode specific optimizations */
 .dark {
     color-scheme: dark;
+    --bg-card: #141414;
+    --bg-input: #1a1a1a;
 }
 
 /* Minimal mobile theme transitions */
@@ -201,11 +203,11 @@ img.loaded {
 }
 
 .dark ::-webkit-scrollbar-thumb {
-    background: rgba(75, 85, 99, 0.5);
+    background: rgba(100, 100, 100, 0.3);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(75, 85, 99, 0.7);
+    background: rgba(100, 100, 100, 0.5);
 }
 
 /* Loading overlay */
@@ -226,7 +228,7 @@ img.loaded {
 }
 
 .dark .loading-overlay {
-    background: rgba(17, 24, 39, 0.9);
+    background: rgba(10, 10, 10, 0.95);
 }
 
 /* Enhanced card hover effects */
@@ -241,7 +243,7 @@ img.loaded {
 }
 
 .dark .movie-card:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* Toast notification styles */
@@ -320,7 +322,7 @@ img.loaded {
 }
 
 .dark .skeleton-card {
-    background: #374151;
+    background: #1a1a1a;
 }
 
 .dark .skeleton-card::after {

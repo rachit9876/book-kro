@@ -6,19 +6,19 @@ function createMovieCard(movie, isFavorite = false) {
 
     const posterUrl = movie.poster_path ? api.getImageUrl(movie.poster_path, 'w342') : 'assets/placeHolder.webp';
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
-    const releaseDate = movie.release_date ? new Date(movie.release_date).toLocaleDateString('en-IN', { 
-        day: 'numeric', 
-        month: 'short', 
-        year: 'numeric' 
+    const releaseDate = movie.release_date ? new Date(movie.release_date).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
     }) : 'TBA';
-    
+
     // Truncate title for better mobile display
-    const truncatedTitle = movie.title.length > 20 ? 
-        movie.title.substring(0, 17) + '...' : 
+    const truncatedTitle = movie.title.length > 20 ?
+        movie.title.substring(0, 17) + '...' :
         movie.title;
-    
+
     return `
-        <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 hover:shadow-lg transition-all duration-300 movie-card border border-gray-200 dark:border-gray-700 group" 
+        <div class="bg-white dark:bg-[#141414] rounded-xl overflow-hidden cursor-pointer transform hover:scale-[1.02] hover:shadow-xl transition-all duration-300 movie-card border border-gray-200 dark:border-gray-800 group" 
              data-movie-id="${movie.id}"
              tabindex="0"
              role="button"
@@ -29,14 +29,14 @@ function createMovieCard(movie, isFavorite = false) {
                 <img 
                     data-src="${posterUrl}" 
                     alt="${movie.title} poster" 
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                     onerror="this.src='assets/placeHolder.webp'; this.onerror=null;"
-                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342' height='513'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3C/svg%3E"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342' height='513'%3E%3Crect width='100%25' height='100%25' fill='%231a1a1a'/%3E%3C/svg%3E"
                 >
                 
                 <!-- Rating badge with better styling -->
-                <div class="absolute top-2 right-2 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-sm">
+                <div class="absolute top-2 right-2 bg-amber-500/90 text-black px-2 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-sm">
                     ⭐ ${rating}
                 </div>
                 
@@ -54,9 +54,9 @@ function createMovieCard(movie, isFavorite = false) {
                 ` : ''}
                 
                 <!-- Overlay for hover effect -->
-                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                     <div class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
-                        <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-2">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-2">
                             <svg class="w-8 h-8 mx-auto" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
@@ -68,12 +68,12 @@ function createMovieCard(movie, isFavorite = false) {
             
             <div class="p-3 md:p-4">
                 <!-- Movie title with tooltip for full text -->
-                <div class="text-sm md:text-base font-semibold mb-2 line-clamp-2" title="${movie.title}">
+                <div class="text-sm md:text-base font-semibold mb-2 line-clamp-2 text-gray-900 dark:text-gray-100" title="${movie.title}">
                     ${movie.title}
                 </div>
                 
                 <!-- Release date -->
-                <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <div class="text-xs md:text-sm text-gray-500 dark:text-gray-500 mb-3">
                     ${releaseDate}
                 </div>
                 
@@ -81,7 +81,7 @@ function createMovieCard(movie, isFavorite = false) {
                 <div class="space-y-2">
                     <!-- Book Now button -->
                     <button 
-                        class="w-full bg-purple-600 hover:bg-blue-700 text-purple-100 py-1 px-3 rounded-full transition-colors duration-200 book-btn text-sm font-medium shadow-sm" 
+                        class="w-full bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 rounded-full transition-colors duration-200 book-btn text-sm font-medium" 
                         data-movie-id="${movie.id}"
                         aria-label="Book tickets for ${movie.title}">
                         Book Now
@@ -101,16 +101,16 @@ function setupImageLazyLoading() {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 const src = img.getAttribute('data-src');
-                
+
                 if (src) {
                     img.src = src;
                     img.removeAttribute('data-src');
-                    
+
                     // Add fade-in effect when loaded
                     img.addEventListener('load', () => {
                         img.style.opacity = '1';
                     }, { once: true });
-                    
+
                     observer.unobserve(img);
                 }
             }
@@ -141,7 +141,7 @@ function handleMovieCardClick(movieId, element) {
     setTimeout(() => {
         element.style.transform = '';
     }, 150);
-    
+
     // Show modal
     showMovieModal(movieId);
 }

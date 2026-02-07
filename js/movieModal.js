@@ -4,19 +4,19 @@ function createMovieModal(movie) {
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
     const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA';
     const runtime = movie.runtime ? `${movie.runtime} min` : '';
-    
+
     // Get genres
     const genres = movie.genres ? movie.genres.map(g => g.name).slice(0, 3).join(', ') : '';
-    
+
     // Get cast (if available)
-    const cast = movie.credits && movie.credits.cast ? 
+    const cast = movie.credits && movie.credits.cast ?
         movie.credits.cast.slice(0, 5).map(actor => actor.name).join(', ') : '';
-    
+
 
 
     return `
         <div id="movie-modal" class="fixed inset-0 bg-black bg-opacity-0 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4 transition-all duration-300">
-            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-4xl h-[90vh] sm:max-h-[90vh] overflow-y-auto transform translate-y-full sm:translate-y-0 sm:scale-75 transition-all duration-300 shadow-2xl">
+            <div class="bg-white dark:bg-[#141414] rounded-t-2xl sm:rounded-2xl w-full sm:max-w-4xl h-[90vh] sm:max-h-[90vh] overflow-y-auto transform translate-y-full sm:translate-y-0 sm:scale-75 transition-all duration-300 shadow-2xl border-t border-gray-200 dark:border-gray-800 sm:border">
                 
                 <!-- Header with backdrop -->
                 <div class="relative">
@@ -74,13 +74,12 @@ function createMovieModal(movie) {
                             
                             <!-- Action buttons -->
                             <div class="flex gap-3 mb-6">
-                                <button id="book-tickets" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2">
-                                    
+                                <button id="book-tickets" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white px-6 py-2.5 rounded-full transition-colors duration-200 font-medium text-center flex items-center justify-center gap-2 text-sm">
                                     Book Tickets
                                 </button>
                                 
                                 <!-- Share button -->
-                                <button id="share-movie" class="bg-black hover:bg-green-700 text-white px-6 py-3 rounded-full transition-colors duration-200 flex items-center justify-center gap-2" title="Share this movie">
+                                <button id="share-movie" class="bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-5 py-2.5 rounded-full transition-colors duration-200 flex items-center justify-center gap-2 text-sm" title="Share this movie">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
                                     </svg>
@@ -124,19 +123,19 @@ async function showMovieModal(movieId) {
         `);
 
         const movie = await api.getMovieDetails(movieId);
-        
+
         // Remove loading state
         document.getElementById('movie-modal-loading')?.remove();
-        
+
         // Create and show modal
         document.body.insertAdjacentHTML('beforeend', createMovieModal(movie));
-        
+
         const modal = document.getElementById('movie-modal');
         const content = modal.querySelector('div');
-        
+
         // Disable body scroll
         document.body.style.overflow = 'hidden';
-        
+
         // Animate modal in
         setTimeout(() => {
             modal.classList.remove('bg-opacity-0');
@@ -144,10 +143,10 @@ async function showMovieModal(movieId) {
             content.classList.remove('translate-y-full', 'sm:scale-75');
             content.classList.add('translate-y-0', 'sm:scale-100');
         }, 10);
-        
+
         // Setup event listeners
         setupMovieModalEvents(movie);
-        
+
     } catch (error) {
         console.error('Error loading movie details:', error);
         document.getElementById('movie-modal-loading')?.remove();
@@ -161,7 +160,7 @@ function setupMovieModalEvents(movie) {
     document.getElementById('movie-modal').addEventListener('click', (e) => {
         if (e.target.id === 'movie-modal') closeMovieModal();
     });
-    
+
     // Escape key to close
     const handleEscape = (e) => {
         if (e.key === 'Escape') {
@@ -170,14 +169,14 @@ function setupMovieModalEvents(movie) {
         }
     };
     document.addEventListener('keydown', handleEscape);
-    
 
-    
+
+
     // Book tickets
     document.getElementById('book-tickets').addEventListener('click', () => {
         showBookingModal(movie);
     });
-    
+
     // Share movie
     document.getElementById('share-movie').addEventListener('click', () => {
         shareMovie(movie);
@@ -191,13 +190,13 @@ function closeMovieModal() {
     if (modal) {
         // Re-enable body scroll
         document.body.style.overflow = '';
-        
+
         const content = modal.querySelector('div');
         modal.classList.remove('bg-opacity-50');
         modal.classList.add('bg-opacity-0');
         content.classList.remove('translate-y-0', 'sm:scale-100');
         content.classList.add('translate-y-full', 'sm:scale-75');
-        
+
         setTimeout(() => modal.remove(), 300);
     }
 }
@@ -212,7 +211,7 @@ async function shareMovie(movie) {
         text: `Check out ${movie.title} on Book-kro! ${movie.overview?.substring(0, 100)}...`,
         url: window.location.href
     };
-    
+
     try {
         if (navigator.share) {
             await navigator.share(shareData);

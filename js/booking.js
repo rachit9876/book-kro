@@ -2,36 +2,36 @@ function showBookingModal(movie) {
     // Close any existing modals first
     closeMovieModal();
     closeBookingModal();
-    
+
     // Validate movie object
     if (!movie || !movie.id || !movie.title) {
         console.error('Invalid movie object:', movie);
         showError('Unable to load booking details. Please try again.');
         return;
     }
-    
+
     // Check if mobile view
     const isMobile = window.innerWidth < 768;
-    
+
     if (isMobile) {
         showMobileBookingPage(movie);
         return;
     }
-    
+
     const currentDate = new Date();
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 30); // Allow booking up to 30 days ahead
-    
+
     const formatDate = (date) => date.toISOString().split('T')[0];
-    
+
     const bookingModal = `
-        <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+            <div class="bg-white dark:bg-[#141414] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 dark:border-gray-800">
                 <div class="p-6">
                     <!-- Header -->
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400">Book Tickets</h2>
+                            <h2 class="text-2xl font-bold text-violet-600 dark:text-violet-400">Book Tickets</h2>
                             <p class="text-gray-600 dark:text-gray-400 mt-1">${movie.title}</p>
                         </div>
                         <button id="close-booking-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Close booking modal">
@@ -114,6 +114,18 @@ function showBookingModal(movie) {
                             <input type="hidden" id="ticket-count" value="1">
                         </div>
                         
+                        <!-- Email Address -->
+                        <div>
+                            <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                Email Address (for ticket delivery)
+                            </label>
+                            <input type="email" id="email-input" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors" 
+                                   placeholder="Enter your email address" required>
+                        </div>
+                        
                         <!-- Seat Type Selection -->
                         <div>
                             <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
@@ -142,7 +154,7 @@ function showBookingModal(movie) {
                         </div>
                         
                         <!-- Booking Summary -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                        <div class="bg-gray-50 dark:bg-[#1a1a1a] rounded-xl p-4">
                             <h3 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">Booking Summary</h3>
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
@@ -176,7 +188,7 @@ function showBookingModal(movie) {
                         
                         
                         <!-- Proceed to Payment Button -->
-                        <button type="submit" id="confirm-booking" class="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2" disabled>
+                        <button type="submit" id="confirm-booking" class="w-full bg-violet-600 hover:bg-violet-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 px-6 rounded-full font-medium transition-colors duration-200 flex items-center justify-center gap-2 text-sm" disabled>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
@@ -187,11 +199,11 @@ function showBookingModal(movie) {
             </div>
         </div>
     `;
-    
+
     try {
         document.body.insertAdjacentHTML('beforeend', bookingModal);
         setupBookingEvents(movie);
-        
+
         // Initialize custom dropdown for theater selection
         setTimeout(() => {
             if (typeof initializeCustomDropdowns === 'function') {
@@ -212,7 +224,7 @@ function generateShowTimes() {
         { time: '7:00 PM', price: 350 },
         { time: '10:30 PM', price: 300 }
     ];
-    
+
     return times;
 }
 
@@ -228,13 +240,13 @@ function setupBookingEvents(movie) {
         seatMultiplier: 1,
         email: null
     };
-    
+
     // Close modal events
     document.getElementById('close-booking-modal').addEventListener('click', closeBookingModal);
     document.getElementById('booking-modal').addEventListener('click', (e) => {
         if (e.target.id === 'booking-modal') closeBookingModal();
     });
-    
+
     // Form elements
     const form = document.getElementById('booking-form');
     const theaterSelect = document.getElementById('theater-select');
@@ -243,31 +255,31 @@ function setupBookingEvents(movie) {
     const ticketCountDisplay = document.getElementById('ticket-count-display');
     const ticketCountInput = document.getElementById('ticket-count');
     const confirmButton = document.getElementById('confirm-booking');
-    
+
     // Set default date to today
     const today = new Date().toISOString().split('T')[0];
     dateSelect.value = today;
     bookingState.date = today;
-    
+
     // Theater selection
     theaterSelect.addEventListener('change', (e) => {
         bookingState.theater = e.target.value;
         validateForm();
     });
-    
+
     // Date selection
     dateSelect.addEventListener('change', (e) => {
         bookingState.date = e.target.value;
         validateForm();
     });
-    
+
     // Email input
     emailInput.addEventListener('input', (e) => {
         bookingState.email = e.target.value;
         document.getElementById('summary-email').textContent = e.target.value || 'Enter email';
         validateForm();
     });
-    
+
     // Show time selection
     document.querySelectorAll('.show-time-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -275,19 +287,19 @@ function setupBookingEvents(movie) {
             document.querySelectorAll('.show-time-btn').forEach(b => {
                 b.classList.remove('bg-purple-500', 'text-white', 'border-purple-500');
             });
-            
+
             // Add selection to clicked button
             e.currentTarget.classList.add('bg-purple-500', 'text-white', 'border-purple-500');
-            
+
             bookingState.time = e.currentTarget.dataset.time;
             bookingState.timePrice = parseInt(e.currentTarget.dataset.price);
-            
+
             document.getElementById('summary-time').textContent = bookingState.time;
             updateTotalPrice();
             validateForm();
         });
     });
-    
+
     // Ticket count controls
     document.getElementById('decrease-tickets').addEventListener('click', () => {
         if (bookingState.tickets > 1) {
@@ -296,7 +308,7 @@ function setupBookingEvents(movie) {
             updateTotalPrice();
         }
     });
-    
+
     document.getElementById('increase-tickets').addEventListener('click', () => {
         if (bookingState.tickets < 10) {
             bookingState.tickets++;
@@ -304,7 +316,7 @@ function setupBookingEvents(movie) {
             updateTotalPrice();
         }
     });
-    
+
     // Seat type selection
     document.querySelectorAll('.seat-type-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -312,25 +324,25 @@ function setupBookingEvents(movie) {
             document.querySelectorAll('.seat-type-btn').forEach(b => {
                 b.classList.remove('bg-purple-50', 'border-purple-500', 'dark:bg-purple-900');
             });
-            
+
             // Add selection to clicked button
             e.currentTarget.classList.add('bg-purple-50', 'border-purple-500', 'dark:bg-purple-900');
-            
+
             bookingState.seatType = e.currentTarget.dataset.type;
             bookingState.seatMultiplier = parseFloat(e.currentTarget.dataset.multiplier);
-            
+
             const seatTypeNames = {
                 regular: 'Regular',
                 premium: 'Premium',
                 recliner: 'Recliner'
             };
-            
+
             document.getElementById('summary-seat-type').textContent = seatTypeNames[bookingState.seatType];
             updateTotalPrice();
             validateForm();
         });
     });
-    
+
     // Form submission
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -339,30 +351,30 @@ function setupBookingEvents(movie) {
             showPaymentModal(movie, bookingState);
         }
     });
-    
+
     function updateTicketDisplay() {
         ticketCountDisplay.textContent = bookingState.tickets;
         ticketCountInput.value = bookingState.tickets;
         document.getElementById('summary-tickets').textContent = bookingState.tickets;
     }
-    
+
     function updateTotalPrice() {
         if (bookingState.timePrice && bookingState.seatMultiplier) {
             const total = Math.round(bookingState.timePrice * bookingState.tickets * bookingState.seatMultiplier);
             document.getElementById('total-price').textContent = total;
         }
     }
-    
+
     function validateForm() {
-        const isValid = bookingState.theater && 
-                       bookingState.date && 
-                       bookingState.time && 
-                       bookingState.seatType &&
-                       bookingState.email && 
-                       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
-        
+        const isValid = bookingState.theater &&
+            bookingState.date &&
+            bookingState.time &&
+            bookingState.seatType &&
+            bookingState.email &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
+
         confirmButton.disabled = !isValid;
-        
+
         if (isValid) {
             confirmButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
             confirmButton.classList.add('bg-purple-600', 'hover:bg-purple-700');
@@ -370,7 +382,7 @@ function setupBookingEvents(movie) {
             confirmButton.classList.add('bg-gray-400', 'cursor-not-allowed');
             confirmButton.classList.remove('bg-purple-600', 'hover:bg-purple-700');
         }
-        
+
         return isValid;
     }
 }
@@ -414,19 +426,19 @@ function showBookingSuccessModal(booking) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', successModal);
-    
+
     // Setup event listeners
     document.getElementById('close-success').addEventListener('click', () => {
         document.getElementById('success-modal').remove();
     });
-    
+
     document.getElementById('view-bookings').addEventListener('click', () => {
         document.getElementById('success-modal').remove();
         showBookingsTab();
     });
-    
+
     // Auto close after 10 seconds
     setTimeout(() => {
         const modal = document.getElementById('success-modal');
@@ -439,7 +451,7 @@ function showMobileBookingPage(movie) {
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 30);
     const formatDate = (date) => date.toISOString().split('T')[0];
-    
+
     const bookingPage = `
         <div id="mobile-booking-page" class="fixed inset-0 bg-white dark:bg-gray-900 z-50 overflow-y-auto">
             <div class="min-h-screen">
@@ -582,7 +594,7 @@ function showMobileBookingPage(movie) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', bookingPage);
     setupMobileBookingEvents(movie);
 }
@@ -598,37 +610,37 @@ function setupMobileBookingEvents(movie) {
         seatMultiplier: 1,
         email: null
     };
-    
+
     // Back button
     document.getElementById('back-to-home').addEventListener('click', closeMobileBookingPage);
-    
+
     // Form elements
     const theaterSelect = document.getElementById('mobile-theater-select');
     const dateSelect = document.getElementById('mobile-date-select');
     const emailInput = document.getElementById('email-input');
     const confirmButton = document.getElementById('mobile-confirm-booking');
-    
+
     // Set default date
     const today = new Date().toISOString().split('T')[0];
     dateSelect.value = today;
     bookingState.date = today;
-    
+
     // Event listeners
     theaterSelect.addEventListener('change', (e) => {
         bookingState.theater = e.target.value;
         validateMobileForm();
     });
-    
+
     dateSelect.addEventListener('change', (e) => {
         bookingState.date = e.target.value;
         validateMobileForm();
     });
-    
+
     emailInput.addEventListener('input', (e) => {
         bookingState.email = e.target.value;
         validateMobileForm();
     });
-    
+
     // Show time selection
     document.querySelectorAll('.mobile-show-time-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -636,14 +648,14 @@ function setupMobileBookingEvents(movie) {
                 b.classList.remove('bg-purple-500', 'text-white');
             });
             e.currentTarget.classList.add('bg-purple-500', 'text-white');
-            
+
             bookingState.time = e.currentTarget.dataset.time;
             bookingState.timePrice = parseInt(e.currentTarget.dataset.price);
             updateMobileTotalPrice();
             validateMobileForm();
         });
     });
-    
+
     // Ticket count
     document.getElementById('mobile-decrease-tickets').addEventListener('click', () => {
         if (bookingState.tickets > 1) {
@@ -652,7 +664,7 @@ function setupMobileBookingEvents(movie) {
             updateMobileTotalPrice();
         }
     });
-    
+
     document.getElementById('mobile-increase-tickets').addEventListener('click', () => {
         if (bookingState.tickets < 10) {
             bookingState.tickets++;
@@ -660,7 +672,7 @@ function setupMobileBookingEvents(movie) {
             updateMobileTotalPrice();
         }
     });
-    
+
     // Seat type selection
     document.querySelectorAll('.mobile-seat-type-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -668,14 +680,14 @@ function setupMobileBookingEvents(movie) {
                 b.classList.remove('bg-purple-50', 'border-purple-500');
             });
             e.currentTarget.classList.add('bg-purple-50', 'border-purple-500');
-            
+
             bookingState.seatType = e.currentTarget.dataset.type;
             bookingState.seatMultiplier = parseFloat(e.currentTarget.dataset.multiplier);
             updateMobileTotalPrice();
             validateMobileForm();
         });
     });
-    
+
     // Form submission
     document.getElementById('mobile-booking-form').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -684,22 +696,22 @@ function setupMobileBookingEvents(movie) {
             showPaymentModal(movie, bookingState);
         }
     });
-    
+
     function updateMobileTotalPrice() {
         if (bookingState.timePrice && bookingState.seatMultiplier) {
             const total = Math.round(bookingState.timePrice * bookingState.tickets * bookingState.seatMultiplier);
             document.getElementById('mobile-total-price').textContent = total;
         }
     }
-    
+
     function validateMobileForm() {
-        const isValid = bookingState.theater && 
-                       bookingState.date && 
-                       bookingState.time && 
-                       bookingState.seatType &&
-                       bookingState.email && 
-                       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
-        
+        const isValid = bookingState.theater &&
+            bookingState.date &&
+            bookingState.time &&
+            bookingState.seatType &&
+            bookingState.email &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingState.email);
+
         confirmButton.disabled = !isValid;
         return isValid;
     }
